@@ -1,0 +1,38 @@
+{
+  "accounts": [
+    {
+      "address": "0xff57CaF5B871db64F2a7F4C5bc2d17A5E666F7E8",
+      "privateKey": "44b8de040dec19cf810efe64919b481e05e2ba643efe003223662f1626b114f0"
+    },
+    {
+      "address": "0xffC11262622D5069aBad729efe84a95C169d9c06",
+      "privateKey": "d77b743a0b9170c230e4a4be446b8605aa45f1d00da3d8cd5e5f778c287e1f22"
+    },
+    {
+      "address": "0xff57CaF5B871db64F2a7F4C5bc2d17A5E666F7E8",
+      "privateKey": "44b8de040dec19cf810efe64919b481e05e2ba643efe003223662f1626b114f0"
+    },
+    {
+      "address": "0xff57CaF5B871db64F2a7F4C5bc2d17A5E666F7E8",
+      "privateKey": "44b8de040dec19cf810efe64919b481e05e2ba643efe003223662f1626b114f0"
+    }
+  ],
+  "chains": {
+    "xrp": {
+      "api": "https://xrpl.flare.network/",
+      "username": "",
+      "password": ""
+    },
+    "ltc": {
+      "api": "https://litecoin.flare.network/",
+      "username": "public",
+      "password": "gA4Yv3cnuXrIvP_7VIZjW1yliZ9GAclj1Td6tRITc6s="
+    }
+  },
+  "flare": {
+    "gas": "6000000",
+    "gasPrice": "10000000000000",
+    "chainId": 16,
+    "url": "http://127.0.0.1:9650/ext/bc/C/rpc"
+  }
+}

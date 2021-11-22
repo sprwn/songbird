@@ -1,0 +1,16 @@
+{
+  "name": "concurrency-test",
+  "version": "1.0.0",
+  "description": "Run a concurrent transaction test against the Flare network validator.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Chuck Benedict",
+  "license": "MIT",
+  "dependencies": {
+    "ethers": "^5.4.3",
+    "solc": "^0.8.6",
+    "yargs": "^17.0.1"
+  }
+}

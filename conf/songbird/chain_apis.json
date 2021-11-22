@@ -1,0 +1,24 @@
+{
+    "LTC": [
+        {
+            "api": "https://litecoin.flare.network/",
+            "auth": "basic",
+            "u": "public",
+            "p": "gA4Yv3cnuXrIvP_7VIZjW1yliZ9GAclj1Td6tRITc6s="
+        },
+        {
+            "api": "https://litecoin-0.flare.network/",
+            "auth": "basic",
+            "u": "public",
+            "p": "gA4Yv3cnuXrIvP_7VIZjW1yliZ9GAclj1Td6tRITc6s="
+        }
+    ],
+    "XRP": [
+        {
+            "api": "https://xrpl.flare.network/"
+        },
+        {
+            "api": "https://xrpl-1.flare.network/"
+        }
+    ]
+}
