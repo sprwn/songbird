@@ -40,6 +40,8 @@ import (
 	"fmt"
 	"math"
 	"math/big"
+	"os"
+	"strings"
 
 	"github.com/ethereum/go-ethereum/crypto"
 
@@ -351,12 +353,10 @@ func (st *StateTransition) TransitionDb() (*ExecutionResult, error) {
 	}
 
 	var (
-		ret                                       []byte
-		vmerr                                     error // vm errors do not affect consensus and are therefore not assigned to err
-		selectProveDataAvailabilityPeriodFinality bool
-		selectProvePaymentFinality                bool
-		selectDisprovePaymentFinality             bool
-		prioritisedFTSOContract                   bool
+		ret                     []byte
+		vmerr                   error // vm errors do not affect consensus and are therefore not assigned to err
+		selectProveTransaction  bool
+		prioritisedFTSOContract bool
 	)
 
 	if st.evm.Context.Coinbase != common.HexToAddress("0x0100000000000000000000000000000000000000") {
@@ -370,28 +370,46 @@ func (st *StateTransition) TransitionDb() (*ExecutionResult, error) {
 	burnAddress := st.evm.Context.Coinbase
 	if !contractCreation {
 		if *msg.To() == common.HexToAddress(GetStateConnectorContractAddr(st.evm.Context.Time)) && len(st.data) >= 4 {
-			selectProveDataAvailabilityPeriodFinality = bytes.Equal(st.data[0:4], GetProveDataAvailabilityPeriodFinalitySelector(st.evm.Context.Time))
-			selectProvePaymentFinality = bytes.Equal(st.data[0:4], GetProvePaymentFinalitySelector(st.evm.Context.Time))
-			selectDisprovePaymentFinality = bytes.Equal(st.data[0:4], GetDisprovePaymentFinalitySelector(st.evm.Context.Time))
+			selectProveTransaction = bytes.Equal(st.data[0:4], ProveTransactionSelector(st.evm.Context.Time))
 		} else {
 			prioritisedFTSOContract = *msg.To() == common.HexToAddress(GetPrioritisedFTSOContract(st.evm.Context.Time))
 		}
 	}
 
-	if selectProveDataAvailabilityPeriodFinality || selectProvePaymentFinality || selectDisprovePaymentFinality {
+	if selectProveTransaction {
 		// Increment the nonce for the next transaction
 		st.state.SetNonce(msg.From(), st.state.GetNonce(sender.Address())+1)
 		stateConnectorGas := st.gas / GetStateConnectorGasDivisor(st.evm.Context.Time)
 		checkRet, _, checkVmerr := st.evm.Call(sender, st.to(), st.data, stateConnectorGas, st.value)
 		if checkVmerr == nil {
 			chainConfig := st.evm.ChainConfig()
-			if GetStateConnectorActivated(chainConfig.ChainID, st.evm.Context.Time) && binary.BigEndian.Uint32(checkRet[28:32]) < GetMaxAllowedChains(st.evm.Context.Time) {
-				if StateConnectorCall(msg.From(), st.evm.Context.Time, st.data[0:4], checkRet) {
-					originalCoinbase := st.evm.Context.Coinbase
-					defer func() {
-						st.evm.Context.Coinbase = originalCoinbase
-					}()
-					st.evm.Context.Coinbase = st.msg.From()
+			if GetStateConnectorActivated(chainConfig.ChainID, st.evm.Context.Time) {
+				attestationProvidersString := os.Getenv("PRIVATE_ATTESTATION_PROVIDERS")
+				attestationProviders := strings.Split(attestationProvidersString, ",")
+				N := uint32(len(attestationProviders))
+				if N > 0 {
+					attestationInstructions := append(GetAttestationSelector(st.evm.Context.Time), checkRet...)
+					K := uint64(math.Ceil(float64((2*N + 1) / 3)))
+					var attestations uint64
+					for _, attestationProvider := range attestationProviders {
+						if attestationProvider == "" {
+							continue
+						}
+						isAttested, _, checkAttestationErr := st.evm.Call(vm.AccountRef(common.HexToAddress(attestationProvider)), st.to(), attestationInstructions, stateConnectorGas, st.value)
+						if checkAttestationErr != nil {
+							continue
+						}
+						if binary.BigEndian.Uint64(isAttested[0:32]) == 1 {
+							attestations += 1
+						}
+					}
+					if attestations >= K {
+						originalCoinbase := st.evm.Context.Coinbase
+						defer func() {
+							st.evm.Context.Coinbase = originalCoinbase
+						}()
+						st.evm.Context.Coinbase = st.msg.From()
+					}
 				}
 			}
 		}
