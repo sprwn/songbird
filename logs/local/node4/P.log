@@ -1,0 +1,29 @@
+DEBUG[11-25|07:25:05] <P Chain> vms/secp256k1fx/fx.go#51: initializing secp561k1 fx
+INFO [11-25|07:25:05] <P Chain> vms/platformvm/vm.go#207: initializing last accepted block as 2KHTVpK9jueX9ZeYb3VmoBThMbkdKmq73yVnxxyk1LfHGfWPeR
+DEBUG[11-25|07:25:05] <P Chain> vms/platformvm/mempool.go#396: next scheduled event is at 292277024627-12-06 15:30:07 +0000 GMT (2562047h47m16.854775807s in the future)
+INFO [11-25|07:25:05] <P Chain> snow/engine/snowman/transitive.go#64: initializing consensus engine
+INFO [11-25|07:25:05] <P Chain> snow/engine/common/bootstrapper.go#82: Starting bootstrap...
+DEBUG[11-25|07:25:05] <P Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-AQghDJTU3zuQj73itPtfTZz6CxsTQVD3R, RequestID: 0)
+DEBUG[11-25|07:25:05] <P Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
+DEBUG[11-25|07:25:05] <P Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc, RequestID: 0)
+DEBUG[11-25|07:25:05] <P Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
+DEBUG[11-25|07:25:05] <P Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted Frontier, NodeID: NodeID-5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc, RequestID: 1, Received: 1637825105, ContainerIDs: [2KHTVpK9jueX9ZeYb3VmoBThMbkdKmq73yVnxxyk1LfHGfWPeR])
+DEBUG[11-25|07:25:05] <P Chain> snow/engine/common/bootstrapper.go#407: sent 1 more GetAccepted messages with 0 more to send
+DEBUG[11-25|07:25:05] <P Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted Frontier
+DEBUG[11-25|07:25:05] <P Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted, NodeID: NodeID-5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc, RequestID: 2, Received: 1637825105, ContainerIDs: [2KHTVpK9jueX9ZeYb3VmoBThMbkdKmq73yVnxxyk1LfHGfWPeR])
+INFO [11-25|07:25:05] <P Chain> snow/engine/common/bootstrapper.go#272: Bootstrapping started syncing with 1 vertices in the accepted frontier
+DEBUG[11-25|07:25:05] <P Chain> snow/engine/snowman/bootstrap/bootstrapper.go#142: Starting bootstrapping with 1 pending blocks and 1 from the accepted frontier
+INFO [11-25|07:25:05] <P Chain> snow/engine/snowman/bootstrap/bootstrapper.go#347: bootstrapping fetched 0 blocks. Executing state transitions...
+INFO [11-25|07:25:05] <P Chain> snow/engine/common/queue/jobs.go#165: executed 0 operations
+INFO [11-25|07:25:05] <P Chain> snow/engine/snowman/bootstrap/bootstrapper.go#380: waiting for the remaining chains in this subnet to finish syncing
+DEBUG[11-25|07:25:05] <P Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted
+DEBUG[11-25|07:25:05] <P Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-FPAwqHjs8Mw8Cuki5bkm3vSVisZr8t2Lu, RequestID: 0)
+DEBUG[11-25|07:25:05] <P Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
+DEBUG[11-25|07:25:05] <P Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-EkH8wyEshzEQBToAdR7Fexxcj9rrmEEHZ, RequestID: 0)
+DEBUG[11-25|07:25:05] <P Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
+DEBUG[11-25|07:25:08] <P Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-HaZ4HpanjndqSuN252chFsTysmdND5meA, RequestID: 0)
+DEBUG[11-25|07:25:08] <P Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
+DEBUG[11-25|07:25:09] <P Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Timeout, NodeID: NodeID-AQghDJTU3zuQj73itPtfTZz6CxsTQVD3R, RequestID: 0)
+INFO [11-25|07:25:09] <P Chain> snow/engine/snowman/transitive.go#128: bootstrapping finished with 2KHTVpK9jueX9ZeYb3VmoBThMbkdKmq73yVnxxyk1LfHGfWPeR as the last accepted block
+DEBUG[11-25|07:25:09] <P Chain> snow/networking/router/handler.go#171: Finished handling message: Timeout
+INFO [11-25|07:26:04] <P Chain> snow/engine/snowman/transitive.go#150: shutting down consensus engine

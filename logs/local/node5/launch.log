@@ -1,0 +1,251 @@
+     _____               .__                       .__
+    /  _  \___  _______  |  | _____    ____   ____ |  |__   ____    ,_ o
+   /  /_\  \  \/ /\__  \ |  | \__  \  /    \_/ ___\|  |  \_/ __ \   / //\,
+  /    |    \   /  / __ \|  |__/ __ \|   |  \  \___|   Y  \  ___/    \>> |
+  \____|__  /\_/  (____  /____(____  /___|  /\___  >___|  /\___  >    \\
+          \/           \/          \/     \/     \/     \/     \/
+INFO [11-25|07:25:08] node/node.go#1036: node version is: avalanche/1.5.2
+INFO [11-25|07:25:08] node/node.go#1037: node ID is: NodeID-HaZ4HpanjndqSuN252chFsTysmdND5meA
+INFO [11-25|07:25:08] node/node.go#1038: current database version: v1.4.5
+INFO [11-25|07:25:08] node/node.go#517: initializing API server
+INFO [11-25|07:25:08] api/server/server.go#82: API created with allowed origins: [*]
+INFO [11-25|07:25:08] node/node.go#810: initializing metrics API
+INFO [11-25|07:25:08] api/server/server.go#208: adding route /ext/metrics
+INFO [11-25|07:25:08] node/node.go#777: initializing keystore
+INFO [11-25|07:25:08] node/node.go#788: initializing keystore API
+INFO [11-25|07:25:08] api/server/server.go#208: adding route /ext/keystore
+INFO [11-25|07:25:08] node/node.go#769: initializing SharedMemory
+INFO [11-25|07:25:08] node/node.go#177: this node's IP is set to: "127.0.0.1:9659"
+DEBUG[11-25|07:25:08] network/dialer/dialer.go#50: dialer has outgoing connection limit of 50/second and dial timeout 30s
+INFO [11-25|07:25:08] node/node.go#908: initializing Health API
+INFO [11-25|07:25:08] api/server/server.go#208: adding route /ext/health
+INFO [11-25|07:25:08] node/node.go#563: initializing VM aliases
+DEBUG[11-25|07:25:08] vms/manager.go#113: adding static API for vm "rWhpuQPF1kb72esV2momhMuTYGkEb1oL29pt2EBXWmSy4kxnT"
+INFO [11-25|07:25:08] api/server/server.go#208: adding route /ext/vm/rWhpuQPF1kb72esV2momhMuTYGkEb1oL29pt2EBXWmSy4kxnT
+DEBUG[11-25|07:25:08] vms/manager.go#113: adding static API for vm "jvYyfQTxGMJLuGWa55kdP2p2zSUYsQ5Raupu4TW34ZAUBAbtq"
+INFO [11-25|07:25:08] api/server/server.go#208: adding route /ext/vm/jvYyfQTxGMJLuGWa55kdP2p2zSUYsQ5Raupu4TW34ZAUBAbtq
+DEBUG[11-25|07:25:08] vms/manager.go#113: adding static API for vm "spdxUxVJQbX85MGxMHbKw1sHxMnSqJ3QBzDyDYEP3h6TLuxqQ"
+DEBUG[11-25|07:25:08] vms/manager.go#113: adding static API for vm "qd2U4HDWUvMrVUeTcCHp6xH3Qpnn1XbU5MDdnBoiifFqvgXwT"
+DEBUG[11-25|07:25:08] vms/manager.go#113: adding static API for vm "rXJsCSEYXg2TehWxCEEGj6JU2PWKTkd6cBdNLjoe2SpsKD9cy"
+DEBUG[11-25|07:25:08] vms/manager.go#113: adding static API for vm "mgj786NP7uDwBCcq6YwThhaN8FLyybkCa4zBWTQbNgmK6k9A6"
+INFO [11-25|07:25:08] api/server/server.go#208: adding route /ext/vm/mgj786NP7uDwBCcq6YwThhaN8FLyybkCa4zBWTQbNgmK6k9A6/ws
+INFO [11-25|07:25:08] api/server/server.go#208: adding route /ext/vm/mgj786NP7uDwBCcq6YwThhaN8FLyybkCa4zBWTQbNgmK6k9A6/rpc
+INFO [11-25|07:25:08] node/node.go#830: node config:
+{"httpConfig":{"apiConfig":{"authConfig":{"apiRequireAuthToken":false},"indexerConfig":{"indexAPIEnabled":false,"indexAllowIncomplete":false},"ipcConfig":{"ipcAPIEnabled":false,"ipcPath":"/tmp","ipcDefaultChainIDs":null},"adminAPIEnabled":false,"infoAPIEnabled":true,"keystoreAPIEnabled":true,"metricsAPIEnabled":true,"healthAPIEnabled":true},"httpHost":"127.0.0.1","httpPort":9658,"httpsEnabled":false,"httpsKeyFile":"","httpsCertFile":"","apiAllowedOrigins":["*"]},"gossipConfig":{"peerListSize":20,"peerListGossipSize":50,"peerListGossipFreq":60000000000,"consensusGossipFreq":10000000000,"consensusGossipAcceptedFrontierSize":35,"consensusGossipOnAcceptSize":20},"ipConfig":{"ip":{"ip":"127.0.0.1","port":9659},"attemptedNATTraversal":false,"dynamicUpdateDuration":300000000000},"stakingConfig":{"uptimeRequirement":0.6,"minValidatorStake":1000000000,"maxValidatorStake":3000000000000000,"minDelegatorStake":1000000000,"minDelegationFee":20000,"minStakeDuration":86400000000000,"maxStakeDuration":31536000000000000,"stakeMintingPeriod":31536000000000000,"enableStaking":true,"disabledStakingWeight":1,"stakingKeyPath":"/home/my-usern/songbird/conf/local/node5/node.key","stakingCertPath":"/home/my-usern/songbird/conf/local/node5/node.crt"},"txFeeConfig":{"txFee":1000000,"createAssetTxFee":10000000,"createSubnetTxFee":100000000,"createBlockchainTxFee":100000000},"epochConfig":{"epochFirstTransition":"2020-12-10T19:00:00Z","epochDuration":21600000000000},"bootstrapConfig":{"retryBootstrap":true,"retryBootstrapWarnFrequency":50,"bootstrapBeaconConnectionTimeout":60000000000,"bootstrapMultiputMaxContainersSent":2000,"bootstrapMultiputMaxContainersReceived":2000,"bootstrapMaxTimeGetAncestors":50000000,"bootstrapIDs":["5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc"],"bootstrapIPs":[{"ip":"127.0.0.1","port":9651}]},"databaseConfig":{"path":"/home/my-usern/songbird/db/local/node5/fuji","name":"rocksdb"},"avaxAssetID":"1S3PSi4VsVpD8iK2vdykuajxVeuCV2xhjPSkQ4K88mqWGozMP","networkID":5,"enableAssertions":true,"enableCrypto":true,"healthCheckFreq":30000000000,"networkConfig":{"healthConfig":{"minConnectedPeers":1,"maxTimeSinceMsgReceived":60000000000,"maxTimeSinceMsgSent":60000000000,"maxPortionSendQueueBytesFull":0.9,"maxSendFailRate":0.9,"maxSendFailRateHalflife":10000000000},"adaptiveTimeoutConfig":{"initialTimeout":5000000000,"minimumTimeout":2000000000,"maximumTimeout":10000000000,"timeoutCoefficient":2,"timeoutHalflife":300000000000},"inboundConnThrottlerConfig":{"allowCooldown":2000000000,"maxRecentConns":1024},"inboundThrottlerConfig":{"vdrAllocSize":33554432,"atLargeAllocSize":33554432,"nodeMaxAtLargeBytes":4194304},"outboundThrottlerConfig":{"vdrAllocSize":33554432,"atLargeAllocSize":33554432,"nodeMaxAtLargeBytes":4194304},"dialerConfig":{"throttleRps":50,"connectionTimeout":30000000000},"compressionEnabled":true,"peerAliasTimeout":600000000000},"benchlistConfig":{"threshold":10,"minimumFailingDuration":300000000000,"duration":1800000000000,"maxPortion":0.06666666666666665,"peerSummaryEnabled":false},"profilerConfig":{"dir":"/home/my-usern/.avalanchego/profiles","enabled":false,"freq":900000000000,"maxNumFiles":5},"loggingConfig":{"rotationInterval":86400000000000,"fileSize":8388608,"rotationSize":7,"flushSize":1,"disableLogging":false,"disableDisplaying":false,"disableContextualDisplaying":false,"disableFlushOnWrite":false,"assertions":false,"logLevel":"DEBUG","displayLevel":"DEBUG","displayHighlight":"PLAIN"},"pluginDir":"/home/my-usern/go/src/github.com/ava-labs/avalanchego/build/plugins","consensusParams":{"k":20,"alpha":16,"betaVirtuous":15,"betaRogue":20,"concurrentRepolls":4,"optimalProcessing":50,"maxOutstandingItems":1024,"maxItemProcessingTime":120000000000,"parents":5,"batchSize":30},"meterVMEnabled":false,"routerHealthConfig":{"maxDropRate":1,"maxDropRateHalflife":10000000000,"maxOutstandingRequests":1024,"maxOutstandingDuration":300000000000,"maxRunTimeRequests":10000000000},"consensusShutdownTimeout":5000000000,"whitelistedSubnets":[],"vmAliases":null}
+INFO [11-25|07:25:08] node/node.go#832: skipping admin API initialization because it has been disabled
+INFO [11-25|07:25:08] node/node.go#879: initializing info API
+INFO [11-25|07:25:08] api/server/server.go#208: adding route /ext/info
+INFO [11-25|07:25:08] node/node.go#963: skipping ipc API initialization because it has been disabled
+INFO [11-25|07:25:08] node/node.go#976: initializing chain aliases
+INFO [11-25|07:25:08] node/node.go#994: initializing API aliases
+INFO [11-25|07:25:08] node/node.go#855: skipping profiler initialization because it has been disabled
+INFO [11-25|07:25:08] node/node.go#503: initializing chains
+INFO [11-25|07:25:08] chains/manager.go#233: creating chain:
+    ID: 11111111111111111111111111111111LpoYY
+    VMID:rWhpuQPF1kb72esV2momhMuTYGkEb1oL29pt2EBXWmSy4kxnT
+DEBUG[11-25|07:25:08] <P Chain> vms/secp256k1fx/fx.go#51: initializing secp561k1 fx
+INFO [11-25|07:25:08] <P Chain> vms/platformvm/vm.go#207: initializing last accepted block as 2KHTVpK9jueX9ZeYb3VmoBThMbkdKmq73yVnxxyk1LfHGfWPeR
+DEBUG[11-25|07:25:08] <P Chain> vms/platformvm/mempool.go#396: next scheduled event is at 292277024627-12-06 15:30:07 +0000 GMT (2562047h47m16.854775807s in the future)
+INFO [11-25|07:25:08] <P Chain> snow/engine/snowman/transitive.go#64: initializing consensus engine
+INFO [11-25|07:25:08] <P Chain> snow/engine/common/bootstrapper.go#82: Starting bootstrap...
+DEBUG[11-25|07:25:08] snow/networking/router/chain_router.go#217: registering chain 11111111111111111111111111111111LpoYY with chain router
+DEBUG[11-25|07:25:08] node/node.go#367: initializing API server without TLS
+INFO [11-25|07:25:08] api/server/server.go#114: HTTP API server listening on "127.0.0.1:9658"
+INFO [11-25|07:25:08] api/server/server.go#192: adding route /ext/bc/11111111111111111111111111111111LpoYY
+DEBUG[11-25|07:25:08] <P Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-HaZ4HpanjndqSuN252chFsTysmdND5meA, RequestID: 0)
+DEBUG[11-25|07:25:08] <P Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
+DEBUG[11-25|07:25:08] network/network.go#1612: connected to 5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc at 127.0.0.1:9651
+DEBUG[11-25|07:25:08] <P Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc, RequestID: 0)
+DEBUG[11-25|07:25:08] <P Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
+DEBUG[11-25|07:25:08] <P Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted Frontier, NodeID: NodeID-5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc, RequestID: 1, Received: 1637825108, ContainerIDs: [2KHTVpK9jueX9ZeYb3VmoBThMbkdKmq73yVnxxyk1LfHGfWPeR])
+DEBUG[11-25|07:25:08] <P Chain> snow/engine/common/bootstrapper.go#407: sent 1 more GetAccepted messages with 0 more to send
+DEBUG[11-25|07:25:08] <P Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted Frontier
+DEBUG[11-25|07:25:08] <P Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted, NodeID: NodeID-5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc, RequestID: 2, Received: 1637825108, ContainerIDs: [2KHTVpK9jueX9ZeYb3VmoBThMbkdKmq73yVnxxyk1LfHGfWPeR])
+INFO [11-25|07:25:08] <P Chain> snow/engine/common/bootstrapper.go#272: Bootstrapping started syncing with 1 vertices in the accepted frontier
+DEBUG[11-25|07:25:08] <P Chain> snow/engine/snowman/bootstrap/bootstrapper.go#142: Starting bootstrapping with 1 pending blocks and 1 from the accepted frontier
+INFO [11-25|07:25:08] <P Chain> snow/engine/snowman/bootstrap/bootstrapper.go#347: bootstrapping fetched 0 blocks. Executing state transitions...
+INFO [11-25|07:25:08] <P Chain> snow/engine/common/queue/jobs.go#165: executed 0 operations
+INFO [11-25|07:25:08] chains/manager.go#233: creating chain:
+    ID: 2t1kDVva2kfYTz8yTg5CGFyMCT6ppxJt31G4mcgQhgvAU5oAw9
+    VMID:mgj786NP7uDwBCcq6YwThhaN8FLyybkCa4zBWTQbNgmK6k9A6
+DEBUG[11-25|07:25:08] network/network.go#1612: connected to AQghDJTU3zuQj73itPtfTZz6CxsTQVD3R at 127.0.0.1:9657
+DEBUG[11-25|07:25:08] network/network.go#1612: connected to FPAwqHjs8Mw8Cuki5bkm3vSVisZr8t2Lu at 127.0.0.1:9655
+DEBUG[11-25|07:25:08] network/network.go#1612: connected to EkH8wyEshzEQBToAdR7Fexxcj9rrmEEHZ at 127.0.0.1:9653
+INFO [11-25|07:25:08] <C Chain> snow/engine/snowman/transitive.go#64: initializing consensus engine
+INFO [11-25|07:25:08] <C Chain> snow/engine/common/bootstrapper.go#82: Starting bootstrap...
+DEBUG[11-25|07:25:08] snow/networking/router/chain_router.go#217: registering chain 2t1kDVva2kfYTz8yTg5CGFyMCT6ppxJt31G4mcgQhgvAU5oAw9 with chain router
+INFO [11-25|07:25:08] chains/manager.go#233: creating chain:
+    ID: 7xKYhEvYuUekwDxozgEiMPufzJ3jJPypKbGE8ny6KL84z4RKB
+    VMID:jvYyfQTxGMJLuGWa55kdP2p2zSUYsQ5Raupu4TW34ZAUBAbtq
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-EkH8wyEshzEQBToAdR7Fexxcj9rrmEEHZ, RequestID: 0)
+DEBUG[11-25|07:25:08] <X Chain> vms/secp256k1fx/fx.go#51: initializing secp561k1 fx
+DEBUG[11-25|07:25:08] <X Chain> vms/nftfx/fx.go#31: initializing nft fx
+DEBUG[11-25|07:25:08] <X Chain> vms/propertyfx/fx.go#29: initializing nft fx
+INFO [11-25|07:25:08] <X Chain> vms/avm/vm.go#558: initializing with AssetID 1S3PSi4VsVpD8iK2vdykuajxVeuCV2xhjPSkQ4K88mqWGozMP
+INFO [11-25|07:25:08] <X Chain> vms/avm/vm.go#544: Fee payments are using Asset with Alias: AVAX, AssetID: 1S3PSi4VsVpD8iK2vdykuajxVeuCV2xhjPSkQ4K88mqWGozMP
+INFO [11-25|07:25:08] api/server/server.go#192: adding route /ext/bc/2t1kDVva2kfYTz8yTg5CGFyMCT6ppxJt31G4mcgQhgvAU5oAw9/avax
+INFO [11-25|07:25:08] <X Chain> vms/avm/vm.go#222: address transaction indexing is disabled
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-AQghDJTU3zuQj73itPtfTZz6CxsTQVD3R, RequestID: 0)
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-HaZ4HpanjndqSuN252chFsTysmdND5meA, RequestID: 0)
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
+INFO [11-25|07:25:08] <X Chain> snow/engine/avalanche/transitive.go#72: initializing consensus engine
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-FPAwqHjs8Mw8Cuki5bkm3vSVisZr8t2Lu, RequestID: 0)
+INFO [11-25|07:25:08] api/server/server.go#192: adding route /ext/bc/2t1kDVva2kfYTz8yTg5CGFyMCT6ppxJt31G4mcgQhgvAU5oAw9/ws
+INFO [11-25|07:25:08] api/server/server.go#192: adding route /ext/bc/2t1kDVva2kfYTz8yTg5CGFyMCT6ppxJt31G4mcgQhgvAU5oAw9/rpc
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc, RequestID: 0)
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
+INFO [11-25|07:25:08] <X Chain> snow/engine/common/bootstrapper.go#82: Starting bootstrap...
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted Frontier, NodeID: NodeID-HaZ4HpanjndqSuN252chFsTysmdND5meA, RequestID: 1, Received: 1637825108, Deadline: 1637825112)
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted Frontier
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted Frontier, NodeID: NodeID-HaZ4HpanjndqSuN252chFsTysmdND5meA, RequestID: 1, Received: 1637825108, ContainerIDs: [2DadjxrHWHVgnoaihBhooVYjnHMmogpmPWBhEQfgTUzsuWXvsQ])
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted Frontier
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted Frontier, NodeID: NodeID-FPAwqHjs8Mw8Cuki5bkm3vSVisZr8t2Lu, RequestID: 1, Received: 1637825108, ContainerIDs: [2DadjxrHWHVgnoaihBhooVYjnHMmogpmPWBhEQfgTUzsuWXvsQ])
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted Frontier
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted Frontier, NodeID: NodeID-EkH8wyEshzEQBToAdR7Fexxcj9rrmEEHZ, RequestID: 1, Received: 1637825108, ContainerIDs: [2DadjxrHWHVgnoaihBhooVYjnHMmogpmPWBhEQfgTUzsuWXvsQ])
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted Frontier
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted Frontier, NodeID: NodeID-AQghDJTU3zuQj73itPtfTZz6CxsTQVD3R, RequestID: 1, Received: 1637825108, ContainerIDs: [2DadjxrHWHVgnoaihBhooVYjnHMmogpmPWBhEQfgTUzsuWXvsQ])
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted Frontier
+DEBUG[11-25|07:25:08] snow/networking/router/chain_router.go#217: registering chain 7xKYhEvYuUekwDxozgEiMPufzJ3jJPypKbGE8ny6KL84z4RKB with chain router
+INFO [11-25|07:25:08] <P Chain> snow/engine/snowman/bootstrap/bootstrapper.go#380: waiting for the remaining chains in this subnet to finish syncing
+DEBUG[11-25|07:25:08] <P Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted
+DEBUG[11-25|07:25:08] <P Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-AQghDJTU3zuQj73itPtfTZz6CxsTQVD3R, RequestID: 0)
+DEBUG[11-25|07:25:08] <P Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-AQghDJTU3zuQj73itPtfTZz6CxsTQVD3R, RequestID: 0)
+DEBUG[11-25|07:25:08] <P Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-FPAwqHjs8Mw8Cuki5bkm3vSVisZr8t2Lu, RequestID: 0)
+DEBUG[11-25|07:25:08] <P Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
+INFO [11-25|07:25:08] api/server/server.go#192: adding route /ext/bc/7xKYhEvYuUekwDxozgEiMPufzJ3jJPypKbGE8ny6KL84z4RKB
+DEBUG[11-25|07:25:08] <P Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-EkH8wyEshzEQBToAdR7Fexxcj9rrmEEHZ, RequestID: 0)
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-EkH8wyEshzEQBToAdR7Fexxcj9rrmEEHZ, RequestID: 0)
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-HaZ4HpanjndqSuN252chFsTysmdND5meA, RequestID: 0)
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc, RequestID: 0)
+INFO [11-25|07:25:08] api/server/server.go#192: adding route /ext/bc/7xKYhEvYuUekwDxozgEiMPufzJ3jJPypKbGE8ny6KL84z4RKB/wallet
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-FPAwqHjs8Mw8Cuki5bkm3vSVisZr8t2Lu, RequestID: 0)
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted Frontier, NodeID: NodeID-HaZ4HpanjndqSuN252chFsTysmdND5meA, RequestID: 1, Received: 1637825108, Deadline: 1637825110)
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted Frontier
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted Frontier, NodeID: NodeID-HaZ4HpanjndqSuN252chFsTysmdND5meA, RequestID: 1, Received: 1637825108, ContainerIDs: [])
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted Frontier
+INFO [11-25|07:25:08] api/server/server.go#192: adding route /ext/bc/7xKYhEvYuUekwDxozgEiMPufzJ3jJPypKbGE8ny6KL84z4RKB/events
+DEBUG[11-25|07:25:08] <P Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted Frontier, NodeID: NodeID-EkH8wyEshzEQBToAdR7Fexxcj9rrmEEHZ, RequestID: 1, Received: 1637825108, ContainerIDs: [])
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted Frontier
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted Frontier, NodeID: NodeID-AQghDJTU3zuQj73itPtfTZz6CxsTQVD3R, RequestID: 1, Received: 1637825108, ContainerIDs: [])
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted Frontier
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted Frontier, NodeID: NodeID-FPAwqHjs8Mw8Cuki5bkm3vSVisZr8t2Lu, RequestID: 1, Received: 1637825108, ContainerIDs: [])
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted Frontier
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted Frontier, NodeID: NodeID-5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc, RequestID: 1, Received: 1637825108, ContainerIDs: [])
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted Frontier, NodeID: NodeID-5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc, RequestID: 1, Received: 1637825108, ContainerIDs: [2DadjxrHWHVgnoaihBhooVYjnHMmogpmPWBhEQfgTUzsuWXvsQ])
+DEBUG[11-25|07:25:08] <C Chain> snow/engine/common/bootstrapper.go#407: sent 5 more GetAccepted messages with 0 more to send
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted Frontier
+DEBUG[11-25|07:25:08] <X Chain> snow/engine/common/bootstrapper.go#407: sent 5 more GetAccepted messages with 0 more to send
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted, NodeID: NodeID-HaZ4HpanjndqSuN252chFsTysmdND5meA, RequestID: 2, Received: 1637825108, Deadline: 1637825110, ContainerIDs: [2DadjxrHWHVgnoaihBhooVYjnHMmogpmPWBhEQfgTUzsuWXvsQ])
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted Frontier
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted, NodeID: NodeID-HaZ4HpanjndqSuN252chFsTysmdND5meA, RequestID: 2, Received: 1637825108, Deadline: 1637825110, ContainerIDs: [])
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted, NodeID: NodeID-HaZ4HpanjndqSuN252chFsTysmdND5meA, RequestID: 2, Received: 1637825108, ContainerIDs: [2DadjxrHWHVgnoaihBhooVYjnHMmogpmPWBhEQfgTUzsuWXvsQ])
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted, NodeID: NodeID-HaZ4HpanjndqSuN252chFsTysmdND5meA, RequestID: 2, Received: 1637825108, ContainerIDs: [])
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted, NodeID: NodeID-5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc, RequestID: 2, Received: 1637825108, ContainerIDs: [])
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted, NodeID: NodeID-5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc, RequestID: 2, Received: 1637825108, ContainerIDs: [2DadjxrHWHVgnoaihBhooVYjnHMmogpmPWBhEQfgTUzsuWXvsQ])
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted, NodeID: NodeID-EkH8wyEshzEQBToAdR7Fexxcj9rrmEEHZ, RequestID: 2, Received: 1637825108, ContainerIDs: [])
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted, NodeID: NodeID-FPAwqHjs8Mw8Cuki5bkm3vSVisZr8t2Lu, RequestID: 2, Received: 1637825108, ContainerIDs: [])
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted, NodeID: NodeID-EkH8wyEshzEQBToAdR7Fexxcj9rrmEEHZ, RequestID: 2, Received: 1637825108, ContainerIDs: [2DadjxrHWHVgnoaihBhooVYjnHMmogpmPWBhEQfgTUzsuWXvsQ])
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted, NodeID: NodeID-FPAwqHjs8Mw8Cuki5bkm3vSVisZr8t2Lu, RequestID: 2, Received: 1637825108, ContainerIDs: [2DadjxrHWHVgnoaihBhooVYjnHMmogpmPWBhEQfgTUzsuWXvsQ])
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted, NodeID: NodeID-AQghDJTU3zuQj73itPtfTZz6CxsTQVD3R, RequestID: 2, Received: 1637825108, ContainerIDs: [2DadjxrHWHVgnoaihBhooVYjnHMmogpmPWBhEQfgTUzsuWXvsQ])
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted, NodeID: NodeID-AQghDJTU3zuQj73itPtfTZz6CxsTQVD3R, RequestID: 2, Received: 1637825108, ContainerIDs: [])
+INFO [11-25|07:25:08] <X Chain> snow/engine/common/bootstrapper.go#272: Bootstrapping started syncing with 0 vertices in the accepted frontier
+DEBUG[11-25|07:25:08] <X Chain> snow/engine/avalanche/bootstrap/bootstrapper.go#402: Starting bootstrapping with 0 missing vertices and 0 from the accepted frontier
+INFO [11-25|07:25:08] <X Chain> snow/engine/avalanche/bootstrap/bootstrapper.go#429: bootstrapping fetched 0 vertices. Executing transaction state transitions...
+INFO [11-25|07:25:08] <X Chain> snow/engine/common/queue/jobs.go#165: executed 0 operations
+INFO [11-25|07:25:08] <X Chain> snow/engine/avalanche/bootstrap/bootstrapper.go#440: executing vertex state transitions...
+INFO [11-25|07:25:08] <X Chain> snow/engine/common/queue/jobs.go#165: executed 0 operations
+INFO [11-25|07:25:08] <X Chain> snow/engine/avalanche/bootstrap/bootstrapper.go#468: waiting for the remaining chains in this subnet to finish syncing
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted
+INFO [11-25|07:25:08] <C Chain> snow/engine/common/bootstrapper.go#272: Bootstrapping started syncing with 1 vertices in the accepted frontier
+DEBUG[11-25|07:25:08] <C Chain> snow/engine/snowman/bootstrap/bootstrapper.go#142: Starting bootstrapping with 1 pending blocks and 1 from the accepted frontier
+INFO [11-25|07:25:08] <C Chain> snow/engine/snowman/bootstrap/bootstrapper.go#347: bootstrapping fetched 0 blocks. Executing state transitions...
+INFO [11-25|07:25:08] <C Chain> snow/engine/common/queue/jobs.go#165: executed 0 operations
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Timeout, NodeID: NodeID-HaZ4HpanjndqSuN252chFsTysmdND5meA, RequestID: 0)
+INFO [11-25|07:25:08] <X Chain> snow/engine/avalanche/transitive.go#109: bootstrapping finished with 0 vertices in the accepted frontier
+DEBUG[11-25|07:25:08] <P Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Timeout, NodeID: NodeID-HaZ4HpanjndqSuN252chFsTysmdND5meA, RequestID: 0)
+DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Timeout
+INFO [11-25|07:25:08] <P Chain> snow/engine/snowman/transitive.go#128: bootstrapping finished with 2KHTVpK9jueX9ZeYb3VmoBThMbkdKmq73yVnxxyk1LfHGfWPeR as the last accepted block
+DEBUG[11-25|07:25:08] <P Chain> snow/networking/router/handler.go#171: Finished handling message: Timeout
+INFO [11-25|07:25:08] <C Chain> snow/engine/snowman/transitive.go#128: bootstrapping finished with 2DadjxrHWHVgnoaihBhooVYjnHMmogpmPWBhEQfgTUzsuWXvsQ as the last accepted block
+DEBUG[11-25|07:25:08] <C Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted
+DEBUG[11-25|07:25:09] <C Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted, NodeID: NodeID-FPAwqHjs8Mw8Cuki5bkm3vSVisZr8t2Lu, RequestID: 2, Received: 1637825109, Deadline: 1637825111, ContainerIDs: [2DadjxrHWHVgnoaihBhooVYjnHMmogpmPWBhEQfgTUzsuWXvsQ])
+DEBUG[11-25|07:25:09] <C Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted
+DEBUG[11-25|07:25:09] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted, NodeID: NodeID-FPAwqHjs8Mw8Cuki5bkm3vSVisZr8t2Lu, RequestID: 2, Received: 1637825109, Deadline: 1637825111, ContainerIDs: [])
+DEBUG[11-25|07:25:09] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted
+DEBUG[11-25|07:25:09] <C Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted, NodeID: NodeID-EkH8wyEshzEQBToAdR7Fexxcj9rrmEEHZ, RequestID: 2, Received: 1637825109, Deadline: 1637825111, ContainerIDs: [2DadjxrHWHVgnoaihBhooVYjnHMmogpmPWBhEQfgTUzsuWXvsQ])
+DEBUG[11-25|07:25:09] <C Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted
+DEBUG[11-25|07:25:09] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted, NodeID: NodeID-EkH8wyEshzEQBToAdR7Fexxcj9rrmEEHZ, RequestID: 2, Received: 1637825109, Deadline: 1637825111, ContainerIDs: [])
+DEBUG[11-25|07:25:09] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted
+DEBUG[11-25|07:25:09] <C Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted, NodeID: NodeID-AQghDJTU3zuQj73itPtfTZz6CxsTQVD3R, RequestID: 2, Received: 1637825109, Deadline: 1637825111, ContainerIDs: [2DadjxrHWHVgnoaihBhooVYjnHMmogpmPWBhEQfgTUzsuWXvsQ])
+DEBUG[11-25|07:25:09] <C Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted
+DEBUG[11-25|07:25:10] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted, NodeID: NodeID-5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc, RequestID: 2, Received: 1637825110, Deadline: 1637825114, ContainerIDs: [])
+DEBUG[11-25|07:25:10] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted
+DEBUG[11-25|07:25:10] <C Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted, NodeID: NodeID-5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc, RequestID: 2, Received: 1637825110, Deadline: 1637825113, ContainerIDs: [2DadjxrHWHVgnoaihBhooVYjnHMmogpmPWBhEQfgTUzsuWXvsQ])
+DEBUG[11-25|07:25:10] <C Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted
+DEBUG[11-25|07:25:18] health/service.go#95: starting to run network
+DEBUG[11-25|07:25:18] health/service.go#95: starting to run router
+DEBUG[11-25|07:25:18] health/service.go#95: starting to run isBootstrapped
+DEBUG[11-25|07:25:18] health/service.go#119: "isBootstrapped" returned healthy with: {"timestamp":"2021-11-25T07:25:18.625199366Z","duration":8335,"contiguousFailures":0,"timeOfFirstFailure":null}
+DEBUG[11-25|07:25:18] health/service.go#119: "router" returned healthy with: {"message":{"longestRunningRequest":"0s","outstandingRequests":0},"timestamp":"2021-11-25T07:25:18.625149269Z","duration":6688,"contiguousFailures":0,"timeOfFirstFailure":null}
+DEBUG[11-25|07:25:18] health/service.go#119: "network" returned healthy with: {"message":{"connectedPeers":4,"sendFailRate":0,"timeSinceLastMsgReceived":"2.62528217s","timeSinceLastMsgSent":"8.62528217s"},"timestamp":"2021-11-25T07:25:18.62512229Z","duration":15392,"contiguousFailures":0,"timeOfFirstFailure":null}
+DEBUG[11-25|07:25:18] health/service.go#95: starting to run P
+DEBUG[11-25|07:25:18] health/service.go#119: "P" returned healthy with: {"message":{"consensus":{"longestRunningBlock":"0s","outstandingBlocks":0},"vm":{"percentConnected":1}},"timestamp":"2021-11-25T07:25:18.751436902Z","duration":35624,"contiguousFailures":0,"timeOfFirstFailure":null}
+DEBUG[11-25|07:25:18] health/service.go#95: starting to run C
+DEBUG[11-25|07:25:18] health/service.go#119: "C" returned healthy with: {"message":{"consensus":{"longestRunningBlock":"0s","outstandingBlocks":0},"vm":{}},"timestamp":"2021-11-25T07:25:18.911207549Z","duration":745073,"contiguousFailures":0,"timeOfFirstFailure":null}
+DEBUG[11-25|07:25:18] health/service.go#95: starting to run X
+DEBUG[11-25|07:25:18] health/service.go#119: "X" returned healthy with: {"message":{"consensus":{"longestRunningVertex":"0s","outstandingVertices":0,"snowstorm":{"longestRunningTx":"0s","outstandingTransactions":0}},"vm":null},"timestamp":"2021-11-25T07:25:18.91246341Z","duration":7113,"contiguousFailures":0,"timeOfFirstFailure":null}
+DEBUG[11-25|07:25:48] health/service.go#95: starting to run isBootstrapped
+DEBUG[11-25|07:25:48] health/service.go#95: starting to run router
+DEBUG[11-25|07:25:48] health/service.go#119: "router" returned healthy with: {"message":{"longestRunningRequest":"0s","outstandingRequests":0},"timestamp":"2021-11-25T07:25:48.625826616Z","duration":7902,"contiguousFailures":0,"timeOfFirstFailure":null}
+DEBUG[11-25|07:25:48] health/service.go#95: starting to run network
+DEBUG[11-25|07:25:48] health/service.go#119: "network" returned healthy with: {"message":{"connectedPeers":4,"sendFailRate":0,"timeSinceLastMsgReceived":"2.626060494s","timeSinceLastMsgSent":"10.626060494s"},"timestamp":"2021-11-25T07:25:48.625829726Z","duration":10110,"contiguousFailures":0,"timeOfFirstFailure":null}
+DEBUG[11-25|07:25:48] health/service.go#119: "isBootstrapped" returned healthy with: {"timestamp":"2021-11-25T07:25:48.625730506Z","duration":620,"contiguousFailures":0,"timeOfFirstFailure":null}
+DEBUG[11-25|07:25:48] health/service.go#95: starting to run P
+DEBUG[11-25|07:25:48] health/service.go#119: "P" returned healthy with: {"message":{"consensus":{"longestRunningBlock":"0s","outstandingBlocks":0},"vm":{"percentConnected":1}},"timestamp":"2021-11-25T07:25:48.751996025Z","duration":21316,"contiguousFailures":0,"timeOfFirstFailure":null}
+DEBUG[11-25|07:25:48] health/service.go#95: starting to run C
+DEBUG[11-25|07:25:48] health/service.go#95: starting to run X
+DEBUG[11-25|07:25:48] health/service.go#119: "X" returned healthy with: {"message":{"consensus":{"longestRunningVertex":"0s","outstandingVertices":0,"snowstorm":{"longestRunningTx":"0s","outstandingTransactions":0}},"vm":null},"timestamp":"2021-11-25T07:25:48.91266539Z","duration":11875,"contiguousFailures":0,"timeOfFirstFailure":null}
+DEBUG[11-25|07:25:48] health/service.go#119: "C" returned healthy with: {"message":{"consensus":{"longestRunningBlock":"0s","outstandingBlocks":0},"vm":{}},"timestamp":"2021-11-25T07:25:48.912356011Z","duration":446784,"contiguousFailures":0,"timeOfFirstFailure":null}
+INFO [11-25|07:26:04] node/node.go#1127: shutting down node with exit code 0
+INFO [11-25|07:26:04] ipcs/chainipc.go#101: shutting down chain IPCs
+INFO [11-25|07:26:04] chains/manager.go#747: shutting down chain manager
+INFO [11-25|07:26:04] snow/networking/router/chain_router.go#182: shutting down chain router
+INFO [11-25|07:26:04] <C Chain> snow/engine/snowman/transitive.go#150: shutting down consensus engine
+INFO [11-25|07:26:04] <X Chain> snow/engine/avalanche/transitive.go#142: shutting down consensus engine
+DEBUG[11-25|07:26:04] snow/networking/router/chain_router.go#235: can't remove unknown chain 7xKYhEvYuUekwDxozgEiMPufzJ3jJPypKbGE8ny6KL84z4RKB
+INFO [11-25|07:26:04] <P Chain> snow/engine/snowman/transitive.go#150: shutting down consensus engine
+DEBUG[11-25|07:26:04] snow/networking/router/chain_router.go#235: can't remove unknown chain 11111111111111111111111111111111LpoYY
+INFO [11-25|07:26:04] network/network.go#1064: shutting down network
+DEBUG[11-25|07:26:04] network/network.go#972: error during server accept: accept tcp [::]:9659: use of closed network connection
+DEBUG[11-25|07:26:04] snow/networking/router/chain_router.go#235: can't remove unknown chain 2t1kDVva2kfYTz8yTg5CGFyMCT6ppxJt31G4mcgQhgvAU5oAw9
+DEBUG[11-25|07:26:04] network/network.go#1633: disconnected from 5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc at 127.0.0.1:9651
+DEBUG[11-25|07:26:04] network/peer.go#516: closing connection to NodeID-AQghDJTU3zuQj73itPtfTZz6CxsTQVD3R at 127.0.0.1:9657 resulted in an error: write tcp 127.0.0.1:48426->127.0.0.1:9657: write: connection reset by peer
+DEBUG[11-25|07:26:04] network/network.go#1633: disconnected from AQghDJTU3zuQj73itPtfTZz6CxsTQVD3R at 127.0.0.1:9657
+DEBUG[11-25|07:26:04] network/peer.go#516: closing connection to NodeID-FPAwqHjs8Mw8Cuki5bkm3vSVisZr8t2Lu at 127.0.0.1:9655 resulted in an error: write tcp 127.0.0.1:36998->127.0.0.1:9655: write: connection reset by peer
+DEBUG[11-25|07:26:04] network/network.go#1633: disconnected from FPAwqHjs8Mw8Cuki5bkm3vSVisZr8t2Lu at 127.0.0.1:9655
+DEBUG[11-25|07:26:04] network/peer.go#516: closing connection to NodeID-EkH8wyEshzEQBToAdR7Fexxcj9rrmEEHZ at 127.0.0.1:9653 resulted in an error: write tcp 127.0.0.1:42054->127.0.0.1:9653: write: connection reset by peer
+DEBUG[11-25|07:26:04] network/network.go#1633: disconnected from EkH8wyEshzEQBToAdR7Fexxcj9rrmEEHZ at 127.0.0.1:9653
+INFO [11-25|07:26:04] node/node.go#1151: cleaning up plugin subprocesses
+INFO [11-25|07:26:04] node/node.go#1154: finished node shutdown
+DEBUG[11-25|07:26:04] app/process/process.go#174: node dispatch returned: accept tcp [::]:9659: use of closed network connection
+INFO [11-25|07:26:04] nat/nat.go#152: Unmapped all ports
