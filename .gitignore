@@ -1,0 +1,12 @@
+node_modules/
+yarn.lock
+logs/
+package-lock.json
+artifacts/
+cache/
+typechain/
+logs/
+db/
+bin/src/stateco/*-solc-output.json
+bin/src/stateco/*.abi
+bin/src/stateco/*.bin
