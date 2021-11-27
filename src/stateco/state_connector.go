@@ -27,7 +27,7 @@ func GetStateConnectorActivated(chainID *big.Int, blockTime *big.Int) bool {
 func GetStateConnectorGasDivisor(blockTime *big.Int) uint64 {
 	switch {
 	default:
-		return 3
+		return 6
 	}
 }
 
@@ -59,35 +59,68 @@ func GetAttestationSelector(blockTime *big.Int) []byte {
 	}
 }
 
+// If you know you're about to fork from the default set, first create a backup of the db/ folder before having a different
+// state transition. This permits an easy way to repair your node if you incorrectly forked.
+
+func (st *StateTransition) CountVotes(attestors []string, instructions []byte) bool {
+	N := uint32(len(attestors))
+	if N == 0 {
+		return false
+	}
+	K := uint64(math.Ceil(float64((2*N + 1) / 3)))
+	var attestations uint64
+	for _, attestationProvider := range attestors {
+		if attestationProvider == "" {
+			continue
+		}
+		isAttested, _, checkAttestationErr := st.evm.Call(vm.AccountRef(common.HexToAddress(attestationProvider)), st.to(), instructions, 20000, st.value)
+		if checkAttestationErr != nil {
+			continue
+		}
+		if binary.BigEndian.Uint64(isAttested[0:32]) == 1 {
+			attestations += 1
+		}
+	}
+	if attestations >= K {
+		return true
+	}
+	return false
+}
+
 func (st *StateTransition) VerifyAttestations(checkRet []byte, checkVmerr error) bool {
 	if checkVmerr != nil {
 		return false
 	}
 	chainConfig := st.evm.ChainConfig()
-	if GetStateConnectorActivated(chainConfig.ChainID, st.evm.Context.Time) {
-		attestationProvidersString := os.Getenv("LOCAL_ATTESTATION_PROVIDERS")
-		attestationProviders := strings.Split(attestationProvidersString, ",")
-		N := uint32(len(attestationProviders))
-		if N > 0 {
-			attestationInstructions := append(GetAttestationSelector(st.evm.Context.Time), checkRet...)
-			K := uint64(math.Ceil(float64((2*N + 1) / 3)))
-			var attestations uint64
-			for _, attestationProvider := range attestationProviders {
-				if attestationProvider == "" {
-					continue
-				}
-				isAttested, _, checkAttestationErr := st.evm.Call(vm.AccountRef(common.HexToAddress(attestationProvider)), st.to(), attestationInstructions, 20000, st.value)
-				if checkAttestationErr != nil {
-					continue
-				}
-				if binary.BigEndian.Uint64(isAttested[0:32]) == 1 {
-					attestations += 1
-				}
-			}
-			if attestations >= K {
-				return true
-			}
-		}
+	if !GetStateConnectorActivated(chainConfig.ChainID, st.evm.Context.Time) {
+		return false
+	}
+	instructions := append(GetAttestationSelector(st.evm.Context.Time), checkRet...)
+
+	// Locally-defined attestation providers (can be a unique set on every Flare node)
+	localAttestationProvidersString := os.Getenv("LOCAL_ATTESTATION_PROVIDERS")
+	var localResult bool
+	if localAttestationProvidersString == "" {
+		localResult = true
+	} else {
+		localAttestationProviders := strings.Split(localAttestationProvidersString, ",")
+		localResult = st.CountVotes(localAttestationProviders, instructions)
+	}
+
+	// Default attestation providers (must be uniform on every Flare node)
+	defaultAttestationProvidersString := "GET CURRENT FTSO PROVIDER ADDRESSES HERE"
+	defaultAttestationProviders := strings.Split(defaultAttestationProvidersString, ",")
+	defaultResult := st.CountVotes(defaultAttestationProviders, instructions)
+
+	if defaultResult && localResult {
+		// Reward all FTSO providers used in the current default set that are consistent
+		// with the voting result. Rewards should be based on participation rate and not
+		// on total number of transactions correctly attested, in order to avoid
+		// incentivising disused transaction proofs from underlying chains.
+		return true
+	} else if defaultResult && !localResult {
+		// Save a snapshot of the current db/ folder, as returning false in the next step
+		// will create a new forked-branch on the Flare network state
 	}
 	return false
 }

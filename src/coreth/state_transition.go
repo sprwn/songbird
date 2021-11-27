@@ -350,11 +350,10 @@ func (st *StateTransition) TransitionDb() (*ExecutionResult, error) {
 	}
 
 	var (
-		ret                       []byte
-		vmerr                     error // vm errors do not affect consensus and are therefore not assigned to err
-		selectRequestAttestations bool
-		selectProveTransaction    bool
-		prioritisedFTSOContract   bool
+		ret                     []byte
+		vmerr                   error // vm errors do not affect consensus and are therefore not assigned to err
+		selectProveTransaction  bool
+		prioritisedFTSOContract bool
 	)
 
 	if st.evm.Context.Coinbase != common.HexToAddress("0x0100000000000000000000000000000000000000") {
@@ -369,25 +368,22 @@ func (st *StateTransition) TransitionDb() (*ExecutionResult, error) {
 	if !contractCreation {
 		if *msg.To() == common.HexToAddress(GetStateConnectorContractAddr(st.evm.Context.Time)) && len(st.data) >= 4 {
 			selectRequestAttestations = bytes.Equal(st.data[0:4], RequestAttestationsSelector(st.evm.Context.Time))
-			selectProveTransaction = bytes.Equal(st.data[0:4], ProveTransactionSelector(st.evm.Context.Time))
 		} else {
 			prioritisedFTSOContract = *msg.To() == common.HexToAddress(GetPrioritisedFTSOContract(st.evm.Context.Time))
 		}
 	}
 
-	if selectRequestAttestations || selectProveTransaction {
+	if selectProveTransaction {
 		// Increment the nonce for the next transaction
 		st.state.SetNonce(msg.From(), st.state.GetNonce(sender.Address())+1)
 		stateConnectorGas := st.gas / GetStateConnectorGasDivisor(st.evm.Context.Time)
-		if selectProveTransaction {
-			checkRet, _, checkVmerr := st.evm.Call(sender, st.to(), st.data, stateConnectorGas, st.value)
-			if st.VerifyAttestations(checkRet, checkVmerr) {
-				originalCoinbase := st.evm.Context.Coinbase
-				defer func() {
-					st.evm.Context.Coinbase = originalCoinbase
-				}()
-				st.evm.Context.Coinbase = st.msg.From()
-			}
+		checkRet, _, checkVmerr := st.evm.Call(sender, st.to(), st.data, stateConnectorGas, st.value)
+		if st.VerifyAttestations(checkRet, checkVmerr) {
+			originalCoinbase := st.evm.Context.Coinbase
+			defer func() {
+				st.evm.Context.Coinbase = originalCoinbase
+			}()
+			st.evm.Context.Coinbase = st.msg.From()
 		}
 		ret, st.gas, vmerr = st.evm.Call(sender, st.to(), st.data, stateConnectorGas, st.value)
 	} else {
