@@ -45,8 +45,6 @@ Configure and launch a 5-node network:
 
 To restart a previously stopped network without resetting it, use the launch command above with the `--existing` flag.
 
-One can change the underlying-chain API endpoints they use for the state-connector system by editing the contents of the file at: `conf/local/chain_apis.json`. This file can differ across all validators on a Flare Network, because these values represent the private choices that a validator has made concerning which API endpoints they wish to rely on for safety in verifying proofs of the state of an underlying-chain.
-
 ## Deploy a Songbird Canary-Network Node
 
 Run the compile command with the `songbird` flag:
