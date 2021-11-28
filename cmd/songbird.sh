@@ -12,9 +12,6 @@ LAUNCH_DIR=$(pwd)
 DB_TYPE=rocksdb
 if [ "$(uname)" == "Darwin" ]; then DB_TYPE=leveldb; fi
 
-# Test and export underlying chain APIs you chose to use for the state connector
-source ./conf/export_chain_apis.sh $LAUNCH_DIR/conf/songbird/chain_apis.json
-
 export FBA_VALs=$LAUNCH_DIR/conf/songbird/fba_validators.json
 AVALANCHE_DIR=$GOPATH/src/github.com/ava-labs/avalanchego
 cd $AVALANCHE_DIR
