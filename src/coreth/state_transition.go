@@ -367,7 +367,7 @@ func (st *StateTransition) TransitionDb() (*ExecutionResult, error) {
 	burnAddress := st.evm.Context.Coinbase
 	if !contractCreation {
 		if *msg.To() == common.HexToAddress(GetStateConnectorContractAddr(st.evm.Context.Time)) && len(st.data) >= 4 {
-			selectRequestAttestations = bytes.Equal(st.data[0:4], RequestAttestationsSelector(st.evm.Context.Time))
+			selectProveTransaction = bytes.Equal(st.data[0:4], ProveTransactionSelector(st.evm.Context.Time))
 		} else {
 			prioritisedFTSOContract = *msg.To() == common.HexToAddress(GetPrioritisedFTSOContract(st.evm.Context.Time))
 		}

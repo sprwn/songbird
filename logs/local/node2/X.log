@@ -1,70 +1,67 @@
-DEBUG[11-25|07:24:59] <X Chain> vms/secp256k1fx/fx.go#51: initializing secp561k1 fx
-DEBUG[11-25|07:24:59] <X Chain> vms/nftfx/fx.go#31: initializing nft fx
-DEBUG[11-25|07:24:59] <X Chain> vms/propertyfx/fx.go#29: initializing nft fx
-INFO [11-25|07:24:59] <X Chain> vms/avm/vm.go#558: initializing with AssetID 1S3PSi4VsVpD8iK2vdykuajxVeuCV2xhjPSkQ4K88mqWGozMP
-INFO [11-25|07:24:59] <X Chain> vms/avm/vm.go#544: Fee payments are using Asset with Alias: AVAX, AssetID: 1S3PSi4VsVpD8iK2vdykuajxVeuCV2xhjPSkQ4K88mqWGozMP
-INFO [11-25|07:24:59] <X Chain> vms/avm/vm.go#222: address transaction indexing is disabled
-INFO [11-25|07:24:59] <X Chain> snow/engine/avalanche/transitive.go#72: initializing consensus engine
-INFO [11-25|07:24:59] <X Chain> snow/engine/common/bootstrapper.go#82: Starting bootstrap...
-DEBUG[11-25|07:24:59] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-EkH8wyEshzEQBToAdR7Fexxcj9rrmEEHZ, RequestID: 0)
-DEBUG[11-25|07:24:59] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
-DEBUG[11-25|07:24:59] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc, RequestID: 0)
-DEBUG[11-25|07:24:59] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
-DEBUG[11-25|07:25:02] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-FPAwqHjs8Mw8Cuki5bkm3vSVisZr8t2Lu, RequestID: 0)
-DEBUG[11-25|07:25:02] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
-DEBUG[11-25|07:25:05] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted Frontier, NodeID: NodeID-5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc, RequestID: 1, Received: 1637825105, Deadline: 1637825110)
-DEBUG[11-25|07:25:05] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted Frontier
-DEBUG[11-25|07:25:05] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted Frontier, NodeID: NodeID-FPAwqHjs8Mw8Cuki5bkm3vSVisZr8t2Lu, RequestID: 1, Received: 1637825105, Deadline: 1637825109)
-DEBUG[11-25|07:25:05] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted Frontier
-DEBUG[11-25|07:25:05] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-AQghDJTU3zuQj73itPtfTZz6CxsTQVD3R, RequestID: 0)
-DEBUG[11-25|07:25:05] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
-DEBUG[11-25|07:25:05] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted Frontier, NodeID: NodeID-EkH8wyEshzEQBToAdR7Fexxcj9rrmEEHZ, RequestID: 1, Received: 1637825105, Deadline: 1637825109)
-DEBUG[11-25|07:25:05] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted Frontier
-DEBUG[11-25|07:25:05] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted Frontier, NodeID: NodeID-EkH8wyEshzEQBToAdR7Fexxcj9rrmEEHZ, RequestID: 1, Received: 1637825105, ContainerIDs: [])
-DEBUG[11-25|07:25:05] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted Frontier
-DEBUG[11-25|07:25:05] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted Frontier, NodeID: NodeID-5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc, RequestID: 1, Received: 1637825105, ContainerIDs: [])
-DEBUG[11-25|07:25:05] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted Frontier
-DEBUG[11-25|07:25:05] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted Frontier, NodeID: NodeID-FPAwqHjs8Mw8Cuki5bkm3vSVisZr8t2Lu, RequestID: 1, Received: 1637825105, ContainerIDs: [])
-DEBUG[11-25|07:25:05] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted Frontier
-DEBUG[11-25|07:25:05] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted Frontier, NodeID: NodeID-AQghDJTU3zuQj73itPtfTZz6CxsTQVD3R, RequestID: 1, Received: 1637825105, Deadline: 1637825107)
-DEBUG[11-25|07:25:05] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted Frontier
-DEBUG[11-25|07:25:07] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted, NodeID: NodeID-AQghDJTU3zuQj73itPtfTZz6CxsTQVD3R, RequestID: 2, Received: 1637825107, Deadline: 1637825109, ContainerIDs: [])
-DEBUG[11-25|07:25:07] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted
-DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-HaZ4HpanjndqSuN252chFsTysmdND5meA, RequestID: 0)
-DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
-DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted Frontier, NodeID: NodeID-HaZ4HpanjndqSuN252chFsTysmdND5meA, RequestID: 1, Received: 1637825108, Deadline: 1637825110)
-DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted Frontier
-DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted, NodeID: NodeID-HaZ4HpanjndqSuN252chFsTysmdND5meA, RequestID: 2, Received: 1637825108, Deadline: 1637825110, ContainerIDs: [])
-DEBUG[11-25|07:25:08] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted
-DEBUG[11-25|07:25:09] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted, NodeID: NodeID-FPAwqHjs8Mw8Cuki5bkm3vSVisZr8t2Lu, RequestID: 2, Received: 1637825109, Deadline: 1637825111, ContainerIDs: [])
-DEBUG[11-25|07:25:09] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted
-DEBUG[11-25|07:25:09] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted Frontier Failed, NodeID: NodeID-HaZ4HpanjndqSuN252chFsTysmdND5meA, RequestID: 1)
-DEBUG[11-25|07:25:09] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted Frontier Failed
-DEBUG[11-25|07:25:09] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted Frontier Failed, NodeID: NodeID-AQghDJTU3zuQj73itPtfTZz6CxsTQVD3R, RequestID: 1)
-DEBUG[11-25|07:25:09] <X Chain> snow/engine/common/bootstrapper.go#407: sent 5 more GetAccepted messages with 0 more to send
-DEBUG[11-25|07:25:09] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted Frontier Failed
-DEBUG[11-25|07:25:09] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted, NodeID: NodeID-EkH8wyEshzEQBToAdR7Fexxcj9rrmEEHZ, RequestID: 2, Received: 1637825109, Deadline: 1637825111, ContainerIDs: [])
-DEBUG[11-25|07:25:09] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted
-DEBUG[11-25|07:25:09] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted, NodeID: NodeID-EkH8wyEshzEQBToAdR7Fexxcj9rrmEEHZ, RequestID: 2, Received: 1637825109, ContainerIDs: [])
-DEBUG[11-25|07:25:09] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted
-DEBUG[11-25|07:25:09] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted, NodeID: NodeID-5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc, RequestID: 2, Received: 1637825109, ContainerIDs: [])
-DEBUG[11-25|07:25:09] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted
-DEBUG[11-25|07:25:09] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted, NodeID: NodeID-AQghDJTU3zuQj73itPtfTZz6CxsTQVD3R, RequestID: 2, Received: 1637825109, ContainerIDs: [])
-DEBUG[11-25|07:25:09] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted
-DEBUG[11-25|07:25:09] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted, NodeID: NodeID-HaZ4HpanjndqSuN252chFsTysmdND5meA, RequestID: 2, Received: 1637825109, ContainerIDs: [])
-DEBUG[11-25|07:25:09] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted
-DEBUG[11-25|07:25:09] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted, NodeID: NodeID-FPAwqHjs8Mw8Cuki5bkm3vSVisZr8t2Lu, RequestID: 2, Received: 1637825109, ContainerIDs: [])
-INFO [11-25|07:25:09] <X Chain> snow/engine/common/bootstrapper.go#272: Bootstrapping started syncing with 0 vertices in the accepted frontier
-DEBUG[11-25|07:25:09] <X Chain> snow/engine/avalanche/bootstrap/bootstrapper.go#402: Starting bootstrapping with 0 missing vertices and 0 from the accepted frontier
-INFO [11-25|07:25:09] <X Chain> snow/engine/avalanche/bootstrap/bootstrapper.go#429: bootstrapping fetched 0 vertices. Executing transaction state transitions...
-INFO [11-25|07:25:09] <X Chain> snow/engine/common/queue/jobs.go#165: executed 0 operations
-INFO [11-25|07:25:09] <X Chain> snow/engine/avalanche/bootstrap/bootstrapper.go#440: executing vertex state transitions...
-INFO [11-25|07:25:09] <X Chain> snow/engine/common/queue/jobs.go#165: executed 0 operations
-INFO [11-25|07:25:09] <X Chain> snow/engine/avalanche/bootstrap/bootstrapper.go#468: waiting for the remaining chains in this subnet to finish syncing
-DEBUG[11-25|07:25:09] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted
-DEBUG[11-25|07:25:09] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Timeout, NodeID: NodeID-EkH8wyEshzEQBToAdR7Fexxcj9rrmEEHZ, RequestID: 0)
-INFO [11-25|07:25:09] <X Chain> snow/engine/avalanche/transitive.go#109: bootstrapping finished with 0 vertices in the accepted frontier
-DEBUG[11-25|07:25:09] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Timeout
-DEBUG[11-25|07:25:10] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted, NodeID: NodeID-5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc, RequestID: 2, Received: 1637825110, Deadline: 1637825114, ContainerIDs: [])
-DEBUG[11-25|07:25:10] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted
-INFO [11-25|07:26:04] <X Chain> snow/engine/avalanche/transitive.go#142: shutting down consensus engine
+DEBUG[11-28|06:07:56] <X Chain> vms/secp256k1fx/fx.go#51: initializing secp561k1 fx
+DEBUG[11-28|06:07:56] <X Chain> vms/nftfx/fx.go#31: initializing nft fx
+DEBUG[11-28|06:07:56] <X Chain> vms/propertyfx/fx.go#29: initializing nft fx
+INFO [11-28|06:07:56] <X Chain> vms/avm/vm.go#558: initializing with AssetID 1S3PSi4VsVpD8iK2vdykuajxVeuCV2xhjPSkQ4K88mqWGozMP
+INFO [11-28|06:07:56] <X Chain> vms/avm/vm.go#544: Fee payments are using Asset with Alias: AVAX, AssetID: 1S3PSi4VsVpD8iK2vdykuajxVeuCV2xhjPSkQ4K88mqWGozMP
+INFO [11-28|06:07:56] <X Chain> vms/avm/vm.go#222: address transaction indexing is disabled
+INFO [11-28|06:07:56] <X Chain> snow/engine/avalanche/transitive.go#72: initializing consensus engine
+INFO [11-28|06:07:56] <X Chain> snow/engine/common/bootstrapper.go#82: Starting bootstrap...
+DEBUG[11-28|06:07:56] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc, RequestID: 0)
+DEBUG[11-28|06:07:56] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
+DEBUG[11-28|06:07:56] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-EkH8wyEshzEQBToAdR7Fexxcj9rrmEEHZ, RequestID: 0)
+DEBUG[11-28|06:07:56] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
+DEBUG[11-28|06:07:59] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-FPAwqHjs8Mw8Cuki5bkm3vSVisZr8t2Lu, RequestID: 0)
+DEBUG[11-28|06:07:59] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
+DEBUG[11-28|06:08:02] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted Frontier, NodeID: NodeID-5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc, RequestID: 1, Received: 1638079682, Deadline: 1638079687)
+DEBUG[11-28|06:08:02] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted Frontier
+DEBUG[11-28|06:08:02] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted Frontier, NodeID: NodeID-FPAwqHjs8Mw8Cuki5bkm3vSVisZr8t2Lu, RequestID: 1, Received: 1638079682, Deadline: 1638079686)
+DEBUG[11-28|06:08:02] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted Frontier
+DEBUG[11-28|06:08:02] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-AQghDJTU3zuQj73itPtfTZz6CxsTQVD3R, RequestID: 0)
+DEBUG[11-28|06:08:02] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
+DEBUG[11-28|06:08:02] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted Frontier, NodeID: NodeID-EkH8wyEshzEQBToAdR7Fexxcj9rrmEEHZ, RequestID: 1, Received: 1638079682, Deadline: 1638079686)
+DEBUG[11-28|06:08:02] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted Frontier
+DEBUG[11-28|06:08:02] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted Frontier, NodeID: NodeID-EkH8wyEshzEQBToAdR7Fexxcj9rrmEEHZ, RequestID: 1, Received: 1638079682, ContainerIDs: [])
+DEBUG[11-28|06:08:02] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted Frontier
+DEBUG[11-28|06:08:02] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted Frontier, NodeID: NodeID-FPAwqHjs8Mw8Cuki5bkm3vSVisZr8t2Lu, RequestID: 1, Received: 1638079682, ContainerIDs: [])
+DEBUG[11-28|06:08:02] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted Frontier
+DEBUG[11-28|06:08:02] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted Frontier, NodeID: NodeID-5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc, RequestID: 1, Received: 1638079682, ContainerIDs: [])
+DEBUG[11-28|06:08:02] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted Frontier
+DEBUG[11-28|06:08:02] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted Frontier, NodeID: NodeID-AQghDJTU3zuQj73itPtfTZz6CxsTQVD3R, RequestID: 1, Received: 1638079682, Deadline: 1638079686)
+DEBUG[11-28|06:08:02] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted Frontier
+DEBUG[11-28|06:08:05] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted Frontier Failed, NodeID: NodeID-HaZ4HpanjndqSuN252chFsTysmdND5meA, RequestID: 1)
+DEBUG[11-28|06:08:05] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted Frontier Failed
+DEBUG[11-28|06:08:05] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted Frontier Failed, NodeID: NodeID-AQghDJTU3zuQj73itPtfTZz6CxsTQVD3R, RequestID: 1)
+DEBUG[11-28|06:08:05] <X Chain> snow/engine/common/bootstrapper.go#407: sent 5 more GetAccepted messages with 0 more to send
+DEBUG[11-28|06:08:05] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted Frontier Failed
+DEBUG[11-28|06:08:05] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted, NodeID: NodeID-EkH8wyEshzEQBToAdR7Fexxcj9rrmEEHZ, RequestID: 2, Received: 1638079685, Deadline: 1638079687, ContainerIDs: [])
+DEBUG[11-28|06:08:05] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted
+DEBUG[11-28|06:08:05] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted, NodeID: NodeID-EkH8wyEshzEQBToAdR7Fexxcj9rrmEEHZ, RequestID: 2, Received: 1638079685, ContainerIDs: [])
+DEBUG[11-28|06:08:05] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted
+DEBUG[11-28|06:08:05] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted, NodeID: NodeID-5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc, RequestID: 2, Received: 1638079685, ContainerIDs: [])
+DEBUG[11-28|06:08:05] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted
+DEBUG[11-28|06:08:05] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted, NodeID: NodeID-AQghDJTU3zuQj73itPtfTZz6CxsTQVD3R, RequestID: 2, Received: 1638079685, ContainerIDs: [])
+DEBUG[11-28|06:08:05] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted
+DEBUG[11-28|06:08:05] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Accepted, NodeID: NodeID-FPAwqHjs8Mw8Cuki5bkm3vSVisZr8t2Lu, RequestID: 2, Received: 1638079685, ContainerIDs: [])
+DEBUG[11-28|06:08:05] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Accepted
+DEBUG[11-28|06:08:05] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Connected, NodeID: NodeID-HaZ4HpanjndqSuN252chFsTysmdND5meA, RequestID: 0)
+DEBUG[11-28|06:08:05] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Connected
+DEBUG[11-28|06:08:05] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted Frontier, NodeID: NodeID-HaZ4HpanjndqSuN252chFsTysmdND5meA, RequestID: 1, Received: 1638079685, Deadline: 1638079687)
+DEBUG[11-28|06:08:05] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted Frontier
+DEBUG[11-28|06:08:05] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted, NodeID: NodeID-HaZ4HpanjndqSuN252chFsTysmdND5meA, RequestID: 2, Received: 1638079685, Deadline: 1638079687, ContainerIDs: [])
+DEBUG[11-28|06:08:05] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted
+DEBUG[11-28|06:08:06] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted, NodeID: NodeID-FPAwqHjs8Mw8Cuki5bkm3vSVisZr8t2Lu, RequestID: 2, Received: 1638079686, Deadline: 1638079688, ContainerIDs: [])
+DEBUG[11-28|06:08:06] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted
+DEBUG[11-28|06:08:06] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted, NodeID: NodeID-AQghDJTU3zuQj73itPtfTZz6CxsTQVD3R, RequestID: 2, Received: 1638079686, Deadline: 1638079688, ContainerIDs: [])
+DEBUG[11-28|06:08:06] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted
+DEBUG[11-28|06:08:07] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted Failed, NodeID: NodeID-HaZ4HpanjndqSuN252chFsTysmdND5meA, RequestID: 2)
+INFO [11-28|06:08:07] <X Chain> snow/engine/common/bootstrapper.go#272: Bootstrapping started syncing with 0 vertices in the accepted frontier
+DEBUG[11-28|06:08:07] <X Chain> snow/engine/avalanche/bootstrap/bootstrapper.go#402: Starting bootstrapping with 0 missing vertices and 0 from the accepted frontier
+INFO [11-28|06:08:07] <X Chain> snow/engine/avalanche/bootstrap/bootstrapper.go#429: bootstrapping fetched 0 vertices. Executing transaction state transitions...
+INFO [11-28|06:08:07] <X Chain> snow/engine/common/queue/jobs.go#165: executed 0 operations
+INFO [11-28|06:08:07] <X Chain> snow/engine/avalanche/bootstrap/bootstrapper.go#440: executing vertex state transitions...
+INFO [11-28|06:08:07] <X Chain> snow/engine/common/queue/jobs.go#165: executed 0 operations
+INFO [11-28|06:08:07] <X Chain> snow/engine/avalanche/transitive.go#109: bootstrapping finished with 0 vertices in the accepted frontier
+DEBUG[11-28|06:08:07] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted Failed
+DEBUG[11-28|06:08:07] <X Chain> snow/networking/router/handler.go#140: Forwarding message to consensus: (Get Accepted, NodeID: NodeID-5dDZXn99LCkDoEi6t9gTitZuQmhokxQTc, RequestID: 2, Received: 1638079687, Deadline: 1638079692, ContainerIDs: [])
+DEBUG[11-28|06:08:07] <X Chain> snow/networking/router/handler.go#171: Finished handling message: Get Accepted
+INFO [11-28|06:52:13] <X Chain> snow/engine/avalanche/transitive.go#142: shutting down consensus engine

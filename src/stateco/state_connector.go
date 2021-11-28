@@ -38,17 +38,10 @@ func GetStateConnectorContractAddr(blockTime *big.Int) string {
 	}
 }
 
-func RequestAttestationsSelector(blockTime *big.Int) []byte {
-	switch {
-	default:
-		return []byte{0x06, 0x95, 0xef, 0x28}
-	}
-}
-
 func ProveTransactionSelector(blockTime *big.Int) []byte {
 	switch {
 	default:
-		return []byte{0xf6, 0x03, 0x58, 0x6a}
+		return []byte{0xb7, 0x2f, 0x8e, 0x15}
 	}
 }
 
