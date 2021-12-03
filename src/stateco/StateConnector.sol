@@ -116,7 +116,7 @@ contract StateConnector {
         bytes32 revealedRandom = buffers[msg.sender].votes[bufferNumber % TOTAL_STORED_BUFFERS].revealedRandom;
         bytes32 committedRandom = buffers[msg.sender].votes[(bufferNumber-1) % TOTAL_STORED_BUFFERS].committedRandom;
         require(committedRandom == keccak256(abi.encodePacked(revealedRandom)));
-        bytes32 maskedMerkleHash = buffers[msg.sender].votes[(bufferNumber-2) % TOTAL_STORED_BUFFERS].maskedMerkleHash;
+        bytes32 maskedMerkleHash = buffers[msg.sender].votes[(bufferNumber-1) % TOTAL_STORED_BUFFERS].maskedMerkleHash;
         return (maskedMerkleHash ^ revealedRandom);
     }
 
