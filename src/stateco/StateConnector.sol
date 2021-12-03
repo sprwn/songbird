@@ -10,25 +10,26 @@ contract StateConnector {
 // Data Structures
 //====================================================================
 
+    uint256 public constant BUFFER_TIMESTAMP_OFFSET = 1636070400 seconds; // November 5th, 2021
     uint256 public constant BUFFER_WINDOW = 90 seconds; // Amount of time a buffer is active before cycling to the next one
- 
+    uint256 public constant TOTAL_STORED_BUFFERS = 3; // {Requests, Votes, Reveals}
+
     // Struct for Vote in round 'R'
     struct Vote {
         bytes32 maskedMerkleHash; // Masked hash of the merkle tree that contains valid requests from round 'R-1' 
         bytes32 committedRandom; // Hash of random value that masks 'maskedMerkleHash' above
-        bytes32 revealedRandom; // Reveal of 'randomCommit' from round 'R-1' Votes struct, used in 'R-2' request voting
+        bytes32 revealedRandom; // Reveal of 'committedRandom' from round 'R-1' Votes struct, used in 'R-2' request voting
     }
 
     struct Buffers {
-        Vote[3] votes; // {Requests, Votes, Reveals}
+        Vote[TOTAL_STORED_BUFFERS] votes; // {Requests, Votes, Reveals}
         uint256 latestVoteBlockNumber;  // The block.number of the last time each address voted
     }
 
     mapping(address => Buffers) public buffers;
     uint256 public totalBuffers; // The total number of buffers that have been used by new attestation requests. 
                                  // totalBuffers == (block.timestamp / BUFFER_WINDOW)
-                                 // The equation above gives the current buffer number: B, (0 <= B < 3)
-    uint256[3] public earliestBufferBlockNumber; // For the last NUM_VOTING_PHASES buffers, this value defines
+    uint256[TOTAL_STORED_BUFFERS] public earliestBufferBlockNumber; // For the last NUM_VOTING_PHASES buffers, this value defines
                                                                  // the block.number that each buffer was first used by a
                                                                  // new attestation request. This value is used for event filtering
                                                                  // by defining block.number windows for filtering attestation
@@ -69,9 +70,9 @@ contract StateConnector {
         require(instructions > 0);
         require(txId > 0x0);
 
-        uint256 updatedBufferNumber = (block.timestamp / BUFFER_WINDOW);
+        uint256 updatedBufferNumber = ((block.timestamp - BUFFER_TIMESTAMP_OFFSET) / BUFFER_WINDOW);
         if (updatedBufferNumber > totalBuffers) {
-            earliestBufferBlockNumber[updatedBufferNumber % 3] = block.number;
+            earliestBufferBlockNumber[updatedBufferNumber % TOTAL_STORED_BUFFERS] = block.number;
             totalBuffers = updatedBufferNumber;
         }
 
@@ -86,9 +87,9 @@ contract StateConnector {
         bytes32 committedRandom,
         bytes32 revealedRandom
     ) external {
-        require(bufferNumber == block.timestamp / BUFFER_WINDOW);
+        require(bufferNumber == (block.timestamp - BUFFER_TIMESTAMP_OFFSET) / BUFFER_WINDOW);
         buffers[msg.sender].latestVoteBlockNumber = block.number;
-        buffers[msg.sender].votes[bufferNumber % 3] = Vote(
+        buffers[msg.sender].votes[bufferNumber % TOTAL_STORED_BUFFERS] = Vote(
             maskedMerkleHash,
             committedRandom,
             revealedRandom
