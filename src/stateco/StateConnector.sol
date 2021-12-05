@@ -29,11 +29,6 @@ contract StateConnector {
         uint256 latestVote;  // The latest buffer number that this account has voted on, used for determining relevant votes
     }
     mapping(address => Buffers) public buffers;
-    uint256[TOTAL_STORED_BUFFERS] public earliestBufferBlockNumber; // For the last NUM_VOTING_PHASES buffers, this value defines
-                                                                 // the block.number that each buffer was first used by a
-                                                                 // new attestation request. This value is used for event filtering
-                                                                 // by defining block.number windows for filtering attestation
-                                                                 // request events.
 
     //======================
     // MERKLE PROOF DATA STRUCTURES
