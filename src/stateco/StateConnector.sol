@@ -29,8 +29,6 @@ contract StateConnector {
         uint256 latestVote;  // The latest buffer number that this account has voted on, used for determining relevant votes
     }
     mapping(address => Buffers) public buffers;
-    uint256 public totalBuffers; // The total number of buffers that have been used by new attestation requests. 
-                                 // totalBuffers == (block.timestamp / BUFFER_WINDOW)
     uint256[TOTAL_STORED_BUFFERS] public earliestBufferBlockNumber; // For the last NUM_VOTING_PHASES buffers, this value defines
                                                                  // the block.number that each buffer was first used by a
                                                                  // new attestation request. This value is used for event filtering
@@ -55,7 +53,6 @@ contract StateConnector {
     // in the attestation response
     event AttestationRequest(
         uint256 timestamp,
-        uint256 bufferNumber,
         uint256 instructions,
         bytes32 txId
     );
@@ -80,16 +77,9 @@ contract StateConnector {
         // Check for empty inputs
         require(instructions > 0);
         require(txId > 0x0);
-
-        uint256 updatedBufferNumber = ((block.timestamp - BUFFER_TIMESTAMP_OFFSET) / BUFFER_WINDOW);
-        if (updatedBufferNumber > totalBuffers) {
-            earliestBufferBlockNumber[updatedBufferNumber % TOTAL_STORED_BUFFERS] = block.number;
-            totalBuffers = updatedBufferNumber;
-        }
-
         // Emit an event containing the details of the request, these details are not stored in 
         // contract storage so they must be retrieved using event filtering.
-        emit AttestationRequest(block.timestamp, totalBuffers, instructions, txId); 
+        emit AttestationRequest(block.timestamp, instructions, txId); 
     }
 
     function submitAttestation(
@@ -126,9 +116,11 @@ contract StateConnector {
     ) external {
         require(bufferNumber == (block.timestamp - BUFFER_TIMESTAMP_OFFSET) / BUFFER_WINDOW);
         require(bufferNumber > totalProofs);
-        require(msg.sender == block.coinbase); // This function can only be called from the golang code
-        totalProofs = bufferNumber;
-        merkleRoots[bufferNumber % TOTAL_STORED_PROOFS] = merkleHash;
+        // This function can only be called from the golang code
+        if (msg.sender == block.coinbase) {
+            totalProofs = bufferNumber;
+            merkleRoots[bufferNumber % TOTAL_STORED_PROOFS] = merkleHash;
+        }
     }
 
 }
