@@ -80,6 +80,8 @@ func (st *StateTransition) CountVotes(attestors []string, instructions []byte) b
 	return false
 }
 
+//
+
 func (st *StateTransition) VerifyAttestations(checkRet []byte, checkVmerr error) bool {
 	if checkVmerr != nil {
 		return false

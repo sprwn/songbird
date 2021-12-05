@@ -10,10 +10,13 @@ contract StateConnector {
 // Data Structures
 //====================================================================
 
+    address public constant GENESIS_COINBASE = address(0x0100000000000000000000000000000000000000); // Default block.coinbase value
+    address public constant SIGNAL_COINBASE = address(0x0200000000000000000000000000000000000000); //  Signalling block.coinbase value
     uint256 public constant BUFFER_TIMESTAMP_OFFSET = 1636070400 seconds; // November 5th, 2021
     uint256 public constant BUFFER_WINDOW = 90 seconds; // Amount of time a buffer is active before cycling to the next one
     uint256 public constant TOTAL_STORED_BUFFERS = 3; // {Requests, Votes, Reveals}
     uint256 public constant TOTAL_STORED_PROOFS = (1 weeks)/BUFFER_WINDOW; // Store a proof for one week
+    uint256 public constant ATTESTATION_REQUEST_FEE = 1 ether; // This fee must be burned to issue an attestation request
 
     //=======================
     // VOTING DATA STRUCTURES
@@ -30,11 +33,12 @@ contract StateConnector {
     }
     mapping(address => Buffers) public buffers;
 
-    //======================
+    //=============================
     // MERKLE PROOF DATA STRUCTURES
-    //======================
+    //=============================
 
-    uint256 public totalProofs; // The total number of merkle roots that have been proven using finaliseRound()
+    uint256 public totalBuffers; // The total number of buffers that have elapsed over time such that the latest buffer
+                                 // has been proven using finaliseRound()
     bytes32[TOTAL_STORED_PROOFS] public merkleRoots; // The proven merkle roots for each buffer number,
                                                      // accessed using: bufferNumber % TOTAL_STORED_PROOFS
                                                      // within one week of proving the merkle root.
@@ -68,7 +72,7 @@ contract StateConnector {
         bytes32 txId
     ) external payable {
         // Check for minimum fee burn
-        require(msg.value >= 1 ether);
+        require(msg.value >= ATTESTATION_REQUEST_FEE);
         // Check for empty inputs
         require(instructions > 0);
         require(txId > 0x0);
@@ -82,7 +86,9 @@ contract StateConnector {
         bytes32 maskedMerkleHash,
         bytes32 committedRandom,
         bytes32 revealedRandom
-    ) external {
+    ) external returns (
+        bool _initialBufferSlot
+    ) {
         require(bufferNumber == (block.timestamp - BUFFER_TIMESTAMP_OFFSET) / BUFFER_WINDOW);
         buffers[msg.sender].latestVote = bufferNumber;
         buffers[msg.sender].votes[bufferNumber % TOTAL_STORED_BUFFERS] = Vote(
@@ -90,6 +96,12 @@ contract StateConnector {
             committedRandom,
             revealedRandom
         );
+        // Determine if this is the first attestation submitted in a new buffer round.
+        // If so, the golang code will automatically finalise the previous round using finaliseRound()
+        if (bufferNumber > totalBuffers) {
+            return true;
+        }
+        return false;
     }
 
     function getAttestation(
@@ -110,11 +122,11 @@ contract StateConnector {
         bytes32 merkleHash
     ) external {
         require(bufferNumber == (block.timestamp - BUFFER_TIMESTAMP_OFFSET) / BUFFER_WINDOW);
-        require(bufferNumber > totalProofs);
-        // This function can only be called from the golang code
-        if (msg.sender == block.coinbase) {
-            totalProofs = bufferNumber;
-            merkleRoots[bufferNumber % TOTAL_STORED_PROOFS] = merkleHash;
+        require(bufferNumber > totalBuffers);
+        // The following region can only be called from the golang code
+        if (block.coinbase == msg.sender && block.coinbase == SIGNAL_COINBASE) {
+            totalBuffers = bufferNumber;
+            merkleRoots[(bufferNumber-1) % TOTAL_STORED_PROOFS] = merkleHash;
         }
     }
 
