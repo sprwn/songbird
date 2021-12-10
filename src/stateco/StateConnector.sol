@@ -10,13 +10,11 @@ contract StateConnector {
 // Data Structures
 //====================================================================
 
-    address public constant GENESIS_COINBASE = address(0x0100000000000000000000000000000000000000); // Default block.coinbase value
-    address public constant SIGNAL_COINBASE = address(0x0200000000000000000000000000000000000000); //  Signalling block.coinbase value
+    address public constant SIGNAL_COINBASE = address(0x000000000000000000000000000000000000dEaD); // Signalling block.coinbase value
     uint256 public constant BUFFER_TIMESTAMP_OFFSET = 1636070400 seconds; // November 5th, 2021
     uint256 public constant BUFFER_WINDOW = 90 seconds; // Amount of time a buffer is active before cycling to the next one
     uint256 public constant TOTAL_STORED_BUFFERS = 3; // {Requests, Votes, Reveals}
     uint256 public constant TOTAL_STORED_PROOFS = (1 weeks)/BUFFER_WINDOW; // Store a proof for one week
-    uint256 public constant ATTESTATION_REQUEST_FEE = 1 ether; // This fee must be burned to issue an attestation request
 
     //=======================
     // VOTING DATA STRUCTURES
@@ -47,13 +45,12 @@ contract StateConnector {
 // Events
 //====================================================================
 
-    // instructions: (uint64 chainId, uint64 blockHeight, uint16 utxo, bool full)
-    // The variable 'full' defines whether to provide the complete transaction details
-    // in the attestation response
+    // 'instructions' and 'id' are purposefully generalised so that the attestation request
+    // can pertain to any number of deterministic oracle use-cases in the future.
     event AttestationRequest(
         uint256 timestamp,
-        uint256 instructions,
-        bytes32 txId
+        uint256 instructions, 
+        bytes32 id
     );
 
 //====================================================================
@@ -69,16 +66,16 @@ contract StateConnector {
 
     function requestAttestations(
         uint256 instructions,
-        bytes32 txId
+        bytes32 id
     ) external payable {
-        // Check for minimum fee burn
-        require(msg.value >= ATTESTATION_REQUEST_FEE);
+        // Check for a fee burn, the exact fee over time is determined in the golang layer
+        require(msg.value > 0);
         // Check for empty inputs
         require(instructions > 0);
-        require(txId > 0x0);
+        require(id > 0x0);
         // Emit an event containing the details of the request, these details are not stored in 
         // contract storage so they must be retrieved using event filtering.
-        emit AttestationRequest(block.timestamp, instructions, txId); 
+        emit AttestationRequest(block.timestamp, instructions, id); 
     }
 
     function submitAttestation(
@@ -87,7 +84,7 @@ contract StateConnector {
         bytes32 committedRandom,
         bytes32 revealedRandom
     ) external returns (
-        bool _initialBufferSlot
+        bool _isInitialBufferSlot
     ) {
         require(bufferNumber == (block.timestamp - BUFFER_TIMESTAMP_OFFSET) / BUFFER_WINDOW);
         buffers[msg.sender].latestVote = bufferNumber;
@@ -109,11 +106,13 @@ contract StateConnector {
     ) external view returns (
         bytes32 _unmaskedMerkleHash
     ) {
-        require(buffers[msg.sender].latestVote >= bufferNumber);
-        bytes32 revealedRandom = buffers[msg.sender].votes[bufferNumber % TOTAL_STORED_BUFFERS].revealedRandom;
-        bytes32 committedRandom = buffers[msg.sender].votes[(bufferNumber-1) % TOTAL_STORED_BUFFERS].committedRandom;
+        require(bufferNumber > 1);
+        uint256 prevBufferNumber = bufferNumber - 1;
+        require(buffers[msg.sender].latestVote >= prevBufferNumber);
+        bytes32 revealedRandom = buffers[msg.sender].votes[prevBufferNumber % TOTAL_STORED_BUFFERS].revealedRandom;
+        bytes32 committedRandom = buffers[msg.sender].votes[(prevBufferNumber-1) % TOTAL_STORED_BUFFERS].committedRandom;
         require(committedRandom == keccak256(abi.encodePacked(revealedRandom)));
-        bytes32 maskedMerkleHash = buffers[msg.sender].votes[(bufferNumber-1) % TOTAL_STORED_BUFFERS].maskedMerkleHash;
+        bytes32 maskedMerkleHash = buffers[msg.sender].votes[(prevBufferNumber-1) % TOTAL_STORED_BUFFERS].maskedMerkleHash;
         return (maskedMerkleHash ^ revealedRandom);
     }
 
@@ -121,10 +120,11 @@ contract StateConnector {
         uint256 bufferNumber,
         bytes32 merkleHash
     ) external {
+        require(bufferNumber > 1);
         require(bufferNumber == (block.timestamp - BUFFER_TIMESTAMP_OFFSET) / BUFFER_WINDOW);
         require(bufferNumber > totalBuffers);
         // The following region can only be called from the golang code
-        if (block.coinbase == msg.sender && block.coinbase == SIGNAL_COINBASE) {
+        if (msg.sender == block.coinbase && block.coinbase == SIGNAL_COINBASE) {
             totalBuffers = bufferNumber;
             merkleRoots[(bufferNumber-1) % TOTAL_STORED_PROOFS] = merkleHash;
         }

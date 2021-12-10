@@ -4,8 +4,7 @@
 package core
 
 import (
-	"encoding/binary"
-	"math"
+	"encoding/hex"
 	"math/big"
 	"os"
 	"strings"
@@ -15,107 +14,214 @@ import (
 )
 
 var (
-	testingChainID               = new(big.Int).SetUint64(16)
-	stateConnectorActivationTime = new(big.Int).SetUint64(1636070400)
+	flareChainID    = new(big.Int).SetUint64(14) // https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-14.json
+	songbirdChainID = new(big.Int).SetUint64(19) // https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-19.json
+
+	flareStateConnectorActivationTime    = new(big.Int).SetUint64(1000000000000)
+	songbirdStateConnectorActivationTime = new(big.Int).SetUint64(1000000000000)
 )
 
+type AttestationVotes struct {
+	reachedMajority    bool
+	majorityDecision   string
+	majorityAttestors  []common.Address
+	divergentAttestors []common.Address
+	abstainedAttestors []common.Address
+}
+
 func GetStateConnectorActivated(chainID *big.Int, blockTime *big.Int) bool {
-	// Return true if chainID is 16 or if block.timestamp is greater than the state connector activation time on any chain
-	return chainID.Cmp(testingChainID) == 0
+	if chainID.Cmp(flareChainID) != 0 && chainID.Cmp(songbirdChainID) != 0 {
+		return true
+	} else if chainID.Cmp(flareChainID) == 0 {
+		return blockTime.Cmp(flareStateConnectorActivationTime) >= 0
+	} else if chainID.Cmp(songbirdChainID) == 0 {
+		return blockTime.Cmp(songbirdStateConnectorActivationTime) >= 0
+	}
+	return false
 }
 
-func GetStateConnectorGasDivisor(blockTime *big.Int) uint64 {
+func GetStateConnectorContract(chainID *big.Int, blockTime *big.Int) common.Address {
 	switch {
 	default:
-		return 6
+		return common.HexToAddress("0x1000000000000000000000000000000000000001")
 	}
 }
 
-func GetStateConnectorContractAddr(blockTime *big.Int) string {
+func GetStateConnectorCoinbaseSignalAddr(chainID *big.Int, blockTime *big.Int) common.Address {
 	switch {
 	default:
-		return "0x1000000000000000000000000000000000000001"
+		return common.HexToAddress("0x000000000000000000000000000000000000dEaD")
 	}
 }
 
-func ProveTransactionSelector(blockTime *big.Int) []byte {
+func CheckAttestationRequestFee(chainID *big.Int, blockTime *big.Int, fee *big.Int) bool {
 	switch {
 	default:
-		return []byte{0xb7, 0x2f, 0x8e, 0x15}
+		return fee.Cmp(big.NewInt(1*10^18)) >= 0
 	}
 }
 
-func GetAttestationSelector(blockTime *big.Int) []byte {
+func RequestAttestationsSelector(chainID *big.Int, blockTime *big.Int) []byte {
+	switch {
+	default:
+		return []byte{0x7c, 0x39, 0x31, 0xc6}
+	}
+}
+
+func SubmitAttestationSelector(chainID *big.Int, blockTime *big.Int) []byte {
+	switch {
+	default:
+		return []byte{0xcf, 0xd1, 0xfd, 0xad}
+	}
+}
+
+func GetAttestationSelector(chainID *big.Int, blockTime *big.Int) []byte {
 	switch {
 	default:
 		return []byte{0x29, 0xbe, 0x4d, 0xb2}
 	}
 }
 
-// If you know you're about to fork from the default set, first create a backup of the db/ folder before having a different
-// state transition. This permits an easy way to repair your node if you incorrectly forked.
-
-func (st *StateTransition) CountVotes(attestors []string, instructions []byte) bool {
-	N := uint32(len(attestors))
-	if N == 0 {
-		return false
+func FinaliseRoundSelector(chainID *big.Int, blockTime *big.Int) []byte {
+	switch {
+	default:
+		return []byte{0xea, 0xeb, 0xf6, 0xd3}
 	}
-	K := uint64(math.Ceil(float64((2*N + 1) / 3)))
-	var attestations uint64
-	for _, attestationProvider := range attestors {
-		if attestationProvider == "" {
-			continue
-		}
-		isAttested, _, checkAttestationErr := st.evm.Call(vm.AccountRef(common.HexToAddress(attestationProvider)), st.to(), instructions, 20000, st.value)
-		if checkAttestationErr != nil {
-			continue
-		}
-		if binary.BigEndian.Uint64(isAttested[0:32]) == 1 {
-			attestations += 1
-		}
-	}
-	if attestations >= K {
-		return true
-	}
-	return false
 }
 
-//
-
-func (st *StateTransition) VerifyAttestations(checkRet []byte, checkVmerr error) bool {
-	if checkVmerr != nil {
-		return false
+func GetVoterWhitelisterSelector(chainID *big.Int, blockTime *big.Int) []byte {
+	switch {
+	default:
+		return []byte{0x71, 0xe1, 0xfa, 0xd9}
 	}
-	chainConfig := st.evm.ChainConfig()
-	if !GetStateConnectorActivated(chainConfig.ChainID, st.evm.Context.Time) {
-		return false
-	}
-	instructions := append(GetAttestationSelector(st.evm.Context.Time), checkRet...)
+}
 
-	// Locally-defined attestation providers (can be a unique set on every Flare node)
-	localAttestationProvidersString := os.Getenv("LOCAL_ATTESTATION_PROVIDERS")
-	var localResult bool
-	if localAttestationProvidersString == "" {
-		localResult = true
-	} else {
-		localAttestationProviders := strings.Split(localAttestationProvidersString, ",")
-		localResult = st.CountVotes(localAttestationProviders, instructions)
+func GetFtsoWhitelistedPriceProvidersSelector(chainID *big.Int, blockTime *big.Int) []byte {
+	switch {
+	default:
+		return []byte{0x09, 0xfc, 0xb4, 0x00}
 	}
+}
 
-	// Default attestation providers (must be uniform on every Flare node)
-	defaultAttestationProvidersString := "GET CURRENT FTSO PROVIDER ADDRESSES HERE"
-	defaultAttestationProviders := strings.Split(defaultAttestationProvidersString, ",")
-	defaultResult := st.CountVotes(defaultAttestationProviders, instructions)
-
-	if defaultResult && localResult {
-		// Reward all FTSO providers used in the current default set that are consistent
-		// with the voting result. Rewards should be based on participation rate and not
-		// on total number of transactions correctly attested, in order to avoid
-		// incentivising disused transaction proofs from underlying chains.
-		return true
-	} else if defaultResult && !localResult {
-		// Save a snapshot of the current db/ folder, as returning false in the next step
-		// will create a new forked-branch on the Flare network state
+// The default attestors are the FTSO price providers
+func (st *StateTransition) GetDefaultAttestors(chainID *big.Int, timestamp *big.Int) ([]common.Address, error) {
+	// Get VoterWhitelister contract
+	voterWhitelisterContractBytes, _, err := st.evm.Call(
+		vm.AccountRef(st.msg.From()),
+		common.HexToAddress(GetPrioritisedFTSOContract(st.evm.Context.BlockNumber)),
+		GetVoterWhitelisterSelector(chainID, timestamp),
+		GetFlareDaemonGasMultiplier(st.evm.Context.BlockNumber)*st.evm.Context.GasLimit,
+		big.NewInt(0))
+	if err != nil {
+		return []common.Address{}, err
 	}
-	return false
+	// Get FTSO prive providers
+	voterWhitelisterContract := common.BytesToAddress(voterWhitelisterContractBytes)
+	priceProvidersBytes, _, err := st.evm.Call(
+		vm.AccountRef(st.msg.From()),
+		voterWhitelisterContract,
+		GetFtsoWhitelistedPriceProvidersSelector(chainID, timestamp),
+		GetFlareDaemonMultiplier(st.evm.Context.BlockNumber)*st.evm.Context.GasLimit,
+		big.NewInt(0))
+	if err != nil {
+		return []common.Address{}, err
+	}
+	NUM_ATTESTORS := len(priceProvidersBytes) / 32
+	var attestors []common.Address
+	for i := 0; i < NUM_ATTESTORS; i++ {
+		attestors = append(attestors, common.BytesToAddress(priceProvidersBytes[i*32:(i+1)*32]))
+	}
+	return attestors, nil
+}
+
+func GetLocalAttestors() []common.Address {
+	localAttestationAttestorsString := os.Getenv("LOCAL_ATTESTATION_PROVIDERS")
+	if localAttestationAttestorsString == "" {
+		return []common.Address{}
+	}
+	localAttestationProviders := strings.Split(localAttestationAttestorsString, ",")
+	NUM_ATTESTORS := len(localAttestationProviders)
+	var attestors []common.Address
+	for i := 0; i < NUM_ATTESTORS; i++ {
+		attestors = append(attestors, common.HexToAddress(localAttestationProviders[i]))
+	}
+	return attestors
+}
+
+func (st *StateTransition) GetAttestation(attestor common.Address, instructions []byte) (string, error) {
+	merkleRootHash, _, err := st.evm.Call(vm.AccountRef(attestor), st.to(), instructions, 20000, big.NewInt(0))
+	return hex.EncodeToString(merkleRootHash), err
+}
+
+func (st *StateTransition) CountAttestations(attestors []common.Address, instructions []byte) (AttestationVotes, error) {
+	var attestationVotes AttestationVotes
+	hashFrequencies := make(map[string][]common.Address)
+	for i, a := range attestors {
+		h, err := st.GetAttestation(a, instructions)
+		if err != nil {
+			attestationVotes.abstainedAttestors = append(attestationVotes.abstainedAttestors, a)
+		}
+		hashFrequencies[h] = append(hashFrequencies[h], attestors[i])
+	}
+	// Find the plurality
+	var pluralityNum int
+	var pluralityKey string
+	for key, val := range hashFrequencies {
+		if len(val) > pluralityNum {
+			pluralityNum = len(val)
+			pluralityKey = key
+		}
+	}
+	if pluralityNum > len(attestors)/2 {
+		attestationVotes.reachedMajority = true
+		attestationVotes.majorityDecision = pluralityKey
+		attestationVotes.majorityAttestors = hashFrequencies[pluralityKey]
+	}
+	for key, val := range hashFrequencies {
+		if key != pluralityKey {
+			attestationVotes.divergentAttestors = append(attestationVotes.divergentAttestors, val...)
+		}
+	}
+	return attestationVotes, nil
+}
+
+func (st *StateTransition) FinalisePreviousRound(chainID *big.Int, timestamp *big.Int, currentRoundNumber []byte) (AttestationVotes, error) {
+	instructions := append(GetAttestationSelector(chainID, timestamp), currentRoundNumber...)
+	defaultAttestors, err := st.GetDefaultAttestors(chainID, timestamp)
+	if err != nil {
+		return AttestationVotes{}, err
+	}
+	defaultAttestationVotes, err := st.CountAttestations(defaultAttestors, instructions)
+	if err != nil {
+		return AttestationVotes{}, err
+	}
+	localAttestors := GetLocalAttestors()
+	var finalityReached bool
+	if len(localAttestors) > 0 {
+		localAttestationVotes, err := st.CountAttestations(localAttestors, instructions)
+		if defaultAttestationVotes.reachedMajority && localAttestationVotes.reachedMajority && defaultAttestationVotes.majorityDecision == localAttestationVotes.majorityDecision {
+			finalityReached = true
+		} else if err != nil || (defaultAttestationVotes.reachedMajority && defaultAttestationVotes.majorityDecision != localAttestationVotes.majorityDecision) {
+			// Make a back-up of the current state database, because this node is about to fork from the default set
+		}
+	} else if defaultAttestationVotes.reachedMajority {
+		finalityReached = true
+	}
+	if finalityReached {
+		// Finalise defaultAttestationVotes.majorityDecision
+		merkleRootHashBytes, err := hex.DecodeString(defaultAttestationVotes.majorityDecision)
+		if err != nil {
+			return AttestationVotes{}, err
+		}
+		finalisedData := append(append(FinaliseRoundSelector(chainID, timestamp), currentRoundNumber...), merkleRootHashBytes...)
+		coinbaseSignal := GetStateConnectorCoinbaseSignalAddr(chainID, timestamp)
+		originalCoinbase := st.evm.Context.Coinbase
+		defer func() {
+			st.evm.Context.Coinbase = originalCoinbase
+		}()
+		st.evm.Context.Coinbase = coinbaseSignal
+		_, _, err = st.evm.Call(vm.AccountRef(coinbaseSignal), st.to(), finalisedData, st.gas, st.value)
+		return defaultAttestationVotes, err
+	}
+	return AttestationVotes{}, nil
 }

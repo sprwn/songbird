@@ -13,13 +13,15 @@ import (
 )
 
 // Define errors
-type ErrInvalidKeeperData struct{}
+type ErrInvalidFlareDaemonData struct{}
 
-func (e *ErrInvalidKeeperData) Error() string { return "invalid return data from keeper trigger" }
+func (e *ErrInvalidFlareDaemonData) Error() string {
+	return "invalid return data from flareDaemon trigger"
+}
 
-type ErrKeeperDataEmpty struct{}
+type ErrFlareDaemonDataEmpty struct{}
 
-func (e *ErrKeeperDataEmpty) Error() string { return "return data from keeper trigger empty" }
+func (e *ErrFlareDaemonDataEmpty) Error() string { return "return data from flareDaemon trigger empty" }
 
 type ErrMaxMintExceeded struct {
 	mintMax     *big.Int
@@ -43,21 +45,21 @@ type EVMCaller interface {
 }
 
 // Define maximums that can change by block height
-func GetKeeperGasMultiplier(blockNumber *big.Int) uint64 {
+func GetFlareDaemonGasMultiplier(blockNumber *big.Int) uint64 {
 	switch {
 	default:
 		return 100
 	}
 }
 
-func GetSystemTriggerContractAddr(blockNumber *big.Int) string {
+func GetFlareDaemonContract(blockNumber *big.Int) string {
 	switch {
 	default:
 		return "0x1000000000000000000000000000000000000002"
 	}
 }
 
-func GetSystemTriggerSelector(blockNumber *big.Int) []byte {
+func GetFlareDaemonSelector(blockNumber *big.Int) []byte {
 	switch {
 	default:
 		return []byte{0x7f, 0xec, 0x8d, 0x38}
@@ -79,16 +81,16 @@ func GetMaximumMintRequest(blockNumber *big.Int) *big.Int {
 	}
 }
 
-func triggerKeeper(evm EVMCaller) (*big.Int, error) {
+func triggerFlareDaemon(evm EVMCaller) (*big.Int, error) {
 	bigZero := big.NewInt(0)
 	// Get the contract to call
-	systemTriggerContract := common.HexToAddress(GetSystemTriggerContractAddr(evm.GetBlockNumber()))
+	flareDaemonContract := common.HexToAddress(GetFlareDaemonContract(evm.GetBlockNumber()))
 	// Call the method
 	triggerRet, _, triggerErr := evm.Call(
-		vm.AccountRef(systemTriggerContract),
-		systemTriggerContract,
-		GetSystemTriggerSelector(evm.GetBlockNumber()),
-		GetKeeperGasMultiplier(evm.GetBlockNumber())*evm.GetGasLimit(),
+		vm.AccountRef(flareDaemonContract),
+		flareDaemonContract,
+		GetFlareDaemonSelector(evm.GetBlockNumber()),
+		GetFlareDaemonGasMultiplier(evm.GetBlockNumber())*evm.GetGasLimit(),
 		bigZero)
 	// If no error and a value came back...
 	if triggerErr == nil && triggerRet != nil {
@@ -101,13 +103,13 @@ func triggerKeeper(evm EVMCaller) (*big.Int, error) {
 			return mintRequest, nil
 		} else {
 			// Returned length was not 32 bytes
-			return bigZero, &ErrInvalidKeeperData{}
+			return bigZero, &ErrInvalidFlareDaemonData{}
 		}
 	} else {
 		if triggerErr != nil {
 			return bigZero, triggerErr
 		} else {
-			return bigZero, &ErrKeeperDataEmpty{}
+			return bigZero, &ErrFlareDaemonDataEmpty{}
 		}
 	}
 }
@@ -117,8 +119,8 @@ func mint(evm EVMCaller, mintRequest *big.Int) error {
 	max := GetMaximumMintRequest(evm.GetBlockNumber())
 	if mintRequest.Cmp(big.NewInt(0)) > 0 &&
 		mintRequest.Cmp(max) <= 0 {
-		// Mint the amount asked for on to the keeper contract
-		evm.AddBalance(common.HexToAddress(GetSystemTriggerContractAddr(evm.GetBlockNumber())), mintRequest)
+		// Mint the amount asked for on to the flareDaemon contract
+		evm.AddBalance(common.HexToAddress(GetFlareDaemonContract(evm.GetBlockNumber())), mintRequest)
 	} else if mintRequest.Cmp(max) > 0 {
 		// Return error
 		return &ErrMaxMintExceeded{
@@ -133,9 +135,10 @@ func mint(evm EVMCaller, mintRequest *big.Int) error {
 	return nil
 }
 
-func triggerKeeperAndMint(evm EVMCaller, log log.Logger) {
-	// Call the keeper
-	mintRequest, triggerErr := triggerKeeper(evm)
+func triggerFlareDaemonAndMint(evm EVMCaller, log log.Logger, attestationVotes AttestationVotes) {
+	// If attestationVotes.reachedMajority == true, then rewards should be distributed to attestation providers
+	// Call the flareDaemon
+	mintRequest, triggerErr := triggerFlareDaemon(evm)
 	// If no error...
 	if triggerErr == nil {
 		// time to mint
@@ -143,6 +146,6 @@ func triggerKeeperAndMint(evm EVMCaller, log log.Logger) {
 			log.Warn("Error minting inflation request", "error", mintError)
 		}
 	} else {
-		log.Warn("Keeper trigger in error", "error", triggerErr)
+		log.Warn("FlareDaemon trigger in error", "error", triggerErr)
 	}
 }

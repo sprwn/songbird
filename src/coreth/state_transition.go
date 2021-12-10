@@ -36,6 +36,7 @@ package core
 
 import (
 	"bytes"
+	"encoding/binary"
 	"fmt"
 	"math"
 	"math/big"
@@ -350,53 +351,44 @@ func (st *StateTransition) TransitionDb() (*ExecutionResult, error) {
 	}
 
 	var (
-		ret                     []byte
-		vmerr                   error // vm errors do not affect consensus and are therefore not assigned to err
-		selectProveTransaction  bool
-		prioritisedFTSOContract bool
+		ret                   []byte
+		vmerr                 error // vm errors do not affect consensus and are therefore not assigned to err
+		chainID               *big.Int
+		timestamp             *big.Int
+		burnAddress           common.Address
+		attestationSubmission bool
+		attestationVotes      AttestationVotes
 	)
 
-	if st.evm.Context.Coinbase != common.HexToAddress("0x0100000000000000000000000000000000000000") {
+	chainID = st.evm.ChainConfig().ChainID
+	timestamp = st.evm.Context.Time
+	burnAddress = st.evm.Context.Coinbase
+	if burnAddress != common.HexToAddress("0x0100000000000000000000000000000000000000") {
 		return nil, fmt.Errorf("Invalid value for block.coinbase")
 	}
-	if st.msg.From() == common.HexToAddress("0x0100000000000000000000000000000000000000") ||
-		st.msg.From() == common.HexToAddress(GetStateConnectorContractAddr(st.evm.Context.Time)) ||
-		st.msg.From() == common.HexToAddress(GetSystemTriggerContractAddr(st.evm.Context.Time)) {
-		return nil, fmt.Errorf("Invalid sender")
-	}
-	burnAddress := st.evm.Context.Coinbase
-	if !contractCreation {
-		if *msg.To() == common.HexToAddress(GetStateConnectorContractAddr(st.evm.Context.Time)) && len(st.data) >= 4 {
-			selectProveTransaction = bytes.Equal(st.data[0:4], ProveTransactionSelector(st.evm.Context.Time))
-		} else {
-			prioritisedFTSOContract = *msg.To() == common.HexToAddress(GetPrioritisedFTSOContract(st.evm.Context.Time))
+
+	if contractCreation {
+		ret, _, st.gas, vmerr = st.evm.Create(sender, st.data, st.gas, st.value)
+	} else {
+		if *msg.To() == GetStateConnectorContract(chainID, timestamp) && len(st.data) >= 4 {
+			if bytes.Equal(st.data[0:4], RequestAttestationsSelector(chainID, timestamp)) && !CheckAttestationRequestFee(chainID, timestamp, st.value) {
+				return nil, fmt.Errorf("Insufficient fee for attestation request")
+			} else if bytes.Equal(st.data[0:4], SubmitAttestationSelector(chainID, timestamp)) {
+				attestationSubmission = true
+			}
+		}
+		// Increment the nonce for the next transaction
+		st.state.SetNonce(msg.From(), st.state.GetNonce(sender.Address())+1)
+		ret, st.gas, vmerr = st.evm.Call(sender, st.to(), st.data, st.gas, st.value)
+		if attestationSubmission && vmerr == nil {
+			if GetStateConnectorActivated(chainID, timestamp) && binary.BigEndian.Uint64(ret[0:32]) > 0 {
+				attestationVotes = st.FinalisePreviousRound(chainID, timestamp, st.data[4:36])
+			}
 		}
 	}
 
-	if selectProveTransaction {
-		// Increment the nonce for the next transaction
-		st.state.SetNonce(msg.From(), st.state.GetNonce(sender.Address())+1)
-		stateConnectorGas := st.gas / GetStateConnectorGasDivisor(st.evm.Context.Time)
-		checkRet, _, checkVmerr := st.evm.Call(sender, st.to(), st.data, stateConnectorGas, st.value)
-		if st.VerifyAttestations(checkRet, checkVmerr) {
-			originalCoinbase := st.evm.Context.Coinbase
-			defer func() {
-				st.evm.Context.Coinbase = originalCoinbase
-			}()
-			st.evm.Context.Coinbase = st.msg.From()
-		}
-		ret, st.gas, vmerr = st.evm.Call(sender, st.to(), st.data, stateConnectorGas, st.value)
-	} else {
-		if contractCreation {
-			ret, _, st.gas, vmerr = st.evm.Create(sender, st.data, st.gas, st.value)
-		} else {
-			// Increment the nonce for the next transaction
-			st.state.SetNonce(msg.From(), st.state.GetNonce(sender.Address())+1)
-			ret, st.gas, vmerr = st.evm.Call(sender, st.to(), st.data, st.gas, st.value)
-		}
-	}
 	st.refundGas(apricotPhase1)
-	if vmerr == nil && prioritisedFTSOContract {
+	if vmerr == nil && *msg.To() == GetPrioritisedFTSOContract(chainID, timestamp) {
 		nominalGasUsed := uint64(21000)
 		nominalGasPrice := uint64(225_000_000_000)
 		nominalFee := new(big.Int).Mul(new(big.Int).SetUint64(nominalGasUsed), new(big.Int).SetUint64(nominalGasPrice))
@@ -414,14 +406,14 @@ func (st *StateTransition) TransitionDb() (*ExecutionResult, error) {
 		st.state.AddBalance(burnAddress, new(big.Int).Mul(new(big.Int).SetUint64(st.gasUsed()), st.gasPrice))
 	}
 
-	// Call the keeper contract trigger method if there is no vm error
+	// Call the flareDaemon contract trigger method if there is no vm error
 	if vmerr == nil {
 		// Temporarily disable EVM debugging
 		oldDebug := st.evm.Config.Debug
 		st.evm.Config.Debug = false
-		// Call the keeper contract trigger
+		// Call the flareDaemon contract trigger
 		log := log.Root()
-		triggerKeeperAndMint(st, log)
+		triggerKeeperAndMint(st, log, attestationVotes)
 		st.evm.Config.Debug = oldDebug
 	}
 
