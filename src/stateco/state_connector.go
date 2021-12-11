@@ -108,7 +108,7 @@ func (st *StateTransition) GetDefaultAttestors(chainID *big.Int, timestamp *big.
 	// Get VoterWhitelister contract
 	voterWhitelisterContractBytes, _, err := st.evm.Call(
 		vm.AccountRef(st.msg.From()),
-		common.HexToAddress(GetPrioritisedFTSOContract(st.evm.Context.BlockNumber)),
+		GetPrioritisedFTSOContract(timestamp),
 		GetVoterWhitelisterSelector(chainID, timestamp),
 		GetFlareDaemonGasMultiplier(st.evm.Context.BlockNumber)*st.evm.Context.GasLimit,
 		big.NewInt(0))
@@ -121,7 +121,7 @@ func (st *StateTransition) GetDefaultAttestors(chainID *big.Int, timestamp *big.
 		vm.AccountRef(st.msg.From()),
 		voterWhitelisterContract,
 		GetFtsoWhitelistedPriceProvidersSelector(chainID, timestamp),
-		GetFlareDaemonMultiplier(st.evm.Context.BlockNumber)*st.evm.Context.GasLimit,
+		GetFlareDaemonGasMultiplier(st.evm.Context.BlockNumber)*st.evm.Context.GasLimit,
 		big.NewInt(0))
 	if err != nil {
 		return []common.Address{}, err

@@ -13,7 +13,7 @@ import (
 	"github.com/ethereum/go-ethereum/log"
 )
 
-// Define a mock structure to spy and mock values for keeper calls
+// Define a mock structure to spy and mock values for flareDaemon calls
 type MockEVMCallerData struct {
 	callCalls            int
 	addBalanceCalls      int
@@ -72,7 +72,7 @@ func (e *DefaultEVMMock) AddBalance(addr common.Address, amount *big.Int) {
 	defaultAddBalance(&e.mockEVMCallerData, addr, amount)
 }
 
-func TestKeeperTriggerShouldReturnMintRequest(t *testing.T) {
+func TestFlareDaemonTriggerShouldReturnMintRequest(t *testing.T) {
 	mintRequestReturn, _ := new(big.Int).SetString("50000000000000000000000000", 10)
 	mockEVMCallerData := &MockEVMCallerData{
 		blockNumber:       *big.NewInt(0),
@@ -83,14 +83,14 @@ func TestKeeperTriggerShouldReturnMintRequest(t *testing.T) {
 		mockEVMCallerData: *mockEVMCallerData,
 	}
 
-	mintRequest, _ := triggerKeeper(defaultEVMMock)
+	mintRequest, _ := triggerFlareDaemon(defaultEVMMock)
 
 	if mintRequest.Cmp(mintRequestReturn) != 0 {
 		t.Errorf("got %s want %q", mintRequest.Text(10), "50000000000000000000000000")
 	}
 }
 
-func TestKeeperTriggerShouldNotLetMintRequestOverflow(t *testing.T) {
+func TestFlareDaemonTriggerShouldNotLetMintRequestOverflow(t *testing.T) {
 	var mintRequestReturn big.Int
 	// TODO: Compact with exponent?
 	buffer := []byte{255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255}
@@ -105,7 +105,7 @@ func TestKeeperTriggerShouldNotLetMintRequestOverflow(t *testing.T) {
 		mockEVMCallerData: *mockEVMCallerData,
 	}
 
-	mintRequest, mintRequestError := triggerKeeper(defaultEVMMock)
+	mintRequest, mintRequestError := triggerFlareDaemon(defaultEVMMock)
 
 	if mintRequestError != nil {
 		t.Errorf("received unexpected error %s", mintRequestError)
@@ -140,7 +140,7 @@ func (e *BadMintReturnSizeEVMMock) AddBalance(addr common.Address, amount *big.I
 	defaultAddBalance(&e.mockEVMCallerData, addr, amount)
 }
 
-func TestKeeperTriggerValidatesMintRequestReturnValueSize(t *testing.T) {
+func TestFlareDaemonTriggerValidatesMintRequestReturnValueSize(t *testing.T) {
 	var mintRequestReturn big.Int
 	// TODO: Compact with exponent?
 	buffer := []byte{255}
@@ -155,11 +155,11 @@ func TestKeeperTriggerValidatesMintRequestReturnValueSize(t *testing.T) {
 		mockEVMCallerData: *mockEVMCallerData,
 	}
 	// Call to return less than 32 bytes
-	_, err := triggerKeeper(badMintReturnSizeEVMMock)
+	_, err := triggerFlareDaemon(badMintReturnSizeEVMMock)
 
 	if err != nil {
-		if err, ok := err.(*ErrInvalidKeeperData); !ok {
-			want := &ErrInvalidKeeperData{}
+		if err, ok := err.(*ErrInvalidFlareDaemonData); !ok {
+			want := &ErrInvalidFlareDaemonData{}
 			t.Errorf("got '%s' want '%s'", err.Error(), want.Error())
 		}
 	} else {
@@ -167,7 +167,7 @@ func TestKeeperTriggerValidatesMintRequestReturnValueSize(t *testing.T) {
 	}
 }
 
-// Define a mock to simulate keeper trigger returning an error from Call
+// Define a mock to simulate flareDaemon trigger returning an error from Call
 type BadTriggerCallEVMMock struct {
 	mockEVMCallerData MockEVMCallerData
 }
@@ -191,13 +191,13 @@ func (e *BadTriggerCallEVMMock) AddBalance(addr common.Address, amount *big.Int)
 	defaultAddBalance(&e.mockEVMCallerData, addr, amount)
 }
 
-func TestKeeperTriggerReturnsCallError(t *testing.T) {
+func TestFlareDaemonTriggerReturnsCallError(t *testing.T) {
 	mockEVMCallerData := &MockEVMCallerData{}
 	badTriggerCallEVMMock := &BadTriggerCallEVMMock{
 		mockEVMCallerData: *mockEVMCallerData,
 	}
 	// Call to return less than 32 bytes
-	_, err := triggerKeeper(badTriggerCallEVMMock)
+	_, err := triggerFlareDaemon(badTriggerCallEVMMock)
 
 	if err == nil {
 		t.Errorf("no error received")
@@ -233,7 +233,7 @@ func (l *LoggerMock) Warn(msg string, ctx ...interface{}) {
 	l.mockLoggerData.warnCalls++
 }
 
-func TestKeeperTriggerAndMintLogsError(t *testing.T) {
+func TestFlareDaemonTriggerAndMintLogsError(t *testing.T) {
 	// Assemble
 	// Set up mock EVM call to return an error
 	mockEVMCallerData := &MockEVMCallerData{}
@@ -247,7 +247,7 @@ func TestKeeperTriggerAndMintLogsError(t *testing.T) {
 	}
 
 	// Act
-	triggerKeeperAndMint(badTriggerCallEVMMock, loggerMock)
+	triggerFlareDaemonAndMint(badTriggerCallEVMMock, loggerMock)
 
 	// Assert
 	if loggerMock.mockLoggerData.warnCalls != 1 {
@@ -255,7 +255,7 @@ func TestKeeperTriggerAndMintLogsError(t *testing.T) {
 	}
 }
 
-// Define a mock to simulate keeper trigger returning nil for mint request
+// Define a mock to simulate flareDaemon trigger returning nil for mint request
 type ReturnNilMintRequestEVMMock struct {
 	mockEVMCallerData MockEVMCallerData
 }
@@ -278,17 +278,17 @@ func (e *ReturnNilMintRequestEVMMock) AddBalance(addr common.Address, amount *bi
 	defaultAddBalance(&e.mockEVMCallerData, addr, amount)
 }
 
-func TestKeeperTriggerHandlesNilMintRequest(t *testing.T) {
+func TestFlareDaemonTriggerHandlesNilMintRequest(t *testing.T) {
 	mockEVMCallerData := &MockEVMCallerData{}
 	returnNilMintRequestEVMMock := &ReturnNilMintRequestEVMMock{
 		mockEVMCallerData: *mockEVMCallerData,
 	}
 	// Call to return less than 32 bytes
-	_, err := triggerKeeper(returnNilMintRequestEVMMock)
+	_, err := triggerFlareDaemon(returnNilMintRequestEVMMock)
 
 	if err != nil {
-		if err, ok := err.(*ErrKeeperDataEmpty); !ok {
-			want := &ErrKeeperDataEmpty{}
+		if err, ok := err.(*ErrFlareDaemonDataEmpty); !ok {
+			want := &ErrFlareDaemonDataEmpty{}
 			t.Errorf("got '%s' want '%s'", err.Error(), want.Error())
 		}
 	} else {
@@ -296,7 +296,7 @@ func TestKeeperTriggerHandlesNilMintRequest(t *testing.T) {
 	}
 }
 
-func TestKeeperTriggerShouldNotMintMoreThanMax(t *testing.T) {
+func TestFlareDaemonTriggerShouldNotMintMoreThanMax(t *testing.T) {
 	mintRequest, _ := new(big.Int).SetString("50000000000000000000000001", 10)
 	mockEVMCallerData := &MockEVMCallerData{
 		blockNumber:       *big.NewInt(0),
@@ -322,7 +322,7 @@ func TestKeeperTriggerShouldNotMintMoreThanMax(t *testing.T) {
 	}
 }
 
-func TestKeeperTriggerShouldNotMintNegative(t *testing.T) {
+func TestFlareDaemonTriggerShouldNotMintNegative(t *testing.T) {
 	mintRequest := big.NewInt(-1)
 	mockEVMCallerData := &MockEVMCallerData{
 		blockNumber:       *big.NewInt(0),
@@ -345,7 +345,7 @@ func TestKeeperTriggerShouldNotMintNegative(t *testing.T) {
 	}
 }
 
-func TestKeeperTriggerShouldMint(t *testing.T) {
+func TestFlareDaemonTriggerShouldMint(t *testing.T) {
 	// Assemble
 	mintRequest, _ := new(big.Int).SetString("50000000000000000000000000", 10)
 	mockEVMCallerData := &MockEVMCallerData{
@@ -376,7 +376,7 @@ func TestKeeperTriggerShouldMint(t *testing.T) {
 	}
 }
 
-func TestKeeperTriggerShouldNotErrorMintingZero(t *testing.T) {
+func TestFlareDaemonTriggerShouldNotErrorMintingZero(t *testing.T) {
 	// Assemble
 	mintRequest := big.NewInt(0)
 	mockEVMCallerData := &MockEVMCallerData{
@@ -401,7 +401,7 @@ func TestKeeperTriggerShouldNotErrorMintingZero(t *testing.T) {
 	}
 }
 
-func TestKeeperTriggerFiredAndMinted(t *testing.T) {
+func TestFlareDaemonTriggerFiredAndMinted(t *testing.T) {
 	mintRequestReturn, _ := new(big.Int).SetString("50000000000000000000000000", 10)
 	mockEVMCallerData := &MockEVMCallerData{
 		blockNumber:       *big.NewInt(0),
@@ -413,9 +413,9 @@ func TestKeeperTriggerFiredAndMinted(t *testing.T) {
 	}
 
 	log := log.New()
-	triggerKeeperAndMint(defaultEVMMock, log)
+	triggerFlareDaemonAndMint(defaultEVMMock, log)
 
-	// EVM Call function calling the keeper should have been cqlled
+	// EVM Call function calling the flareDaemon should have been cqlled
 	if defaultEVMMock.mockEVMCallerData.callCalls != 1 {
 		t.Errorf("EVM Call count not as expected. got %d want 1", defaultEVMMock.mockEVMCallerData.callCalls)
 	}
@@ -425,7 +425,7 @@ func TestKeeperTriggerFiredAndMinted(t *testing.T) {
 	}
 }
 
-func TestKeeperTriggerShouldNotMintMoreThanLimit(t *testing.T) {
+func TestFlareDaemonTriggerShouldNotMintMoreThanLimit(t *testing.T) {
 	mintRequestReturn, _ := new(big.Int).SetString("50000000000000000000000001", 10)
 	mockEVMCallerData := &MockEVMCallerData{
 		blockNumber:       *big.NewInt(0),
@@ -437,9 +437,9 @@ func TestKeeperTriggerShouldNotMintMoreThanLimit(t *testing.T) {
 	}
 
 	log := log.New()
-	triggerKeeperAndMint(defaultEVMMock, log)
+	triggerFlareDaemonAndMint(defaultEVMMock, log)
 
-	// EVM Call function calling the keeper should have been called
+	// EVM Call function calling the flareDaemon should have been called
 	if defaultEVMMock.mockEVMCallerData.callCalls != 1 {
 		t.Errorf("EVM Call count not as expected. got %d want 1", defaultEVMMock.mockEVMCallerData.callCalls)
 	}

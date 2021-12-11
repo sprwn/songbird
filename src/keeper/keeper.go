@@ -66,10 +66,10 @@ func GetFlareDaemonSelector(blockNumber *big.Int) []byte {
 	}
 }
 
-func GetPrioritisedFTSOContract(blockTime *big.Int) string {
+func GetPrioritisedFTSOContract(blockTime *big.Int) common.Address {
 	switch {
 	default:
-		return "0x1000000000000000000000000000000000000003"
+		return common.HexToAddress("0x1000000000000000000000000000000000000003")
 	}
 }
 

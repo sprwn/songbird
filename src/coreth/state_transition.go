@@ -382,13 +382,16 @@ func (st *StateTransition) TransitionDb() (*ExecutionResult, error) {
 		ret, st.gas, vmerr = st.evm.Call(sender, st.to(), st.data, st.gas, st.value)
 		if attestationSubmission && vmerr == nil {
 			if GetStateConnectorActivated(chainID, timestamp) && binary.BigEndian.Uint64(ret[0:32]) > 0 {
-				attestationVotes = st.FinalisePreviousRound(chainID, timestamp, st.data[4:36])
+				attestationVotes, err = st.FinalisePreviousRound(chainID, timestamp, st.data[4:36])
+				if err != nil {
+					log.Warn("Error finalising state connector round", "error", err)
+				}
 			}
 		}
 	}
 
 	st.refundGas(apricotPhase1)
-	if vmerr == nil && *msg.To() == GetPrioritisedFTSOContract(chainID, timestamp) {
+	if vmerr == nil && *msg.To() == GetPrioritisedFTSOContract(timestamp) {
 		nominalGasUsed := uint64(21000)
 		nominalGasPrice := uint64(225_000_000_000)
 		nominalFee := new(big.Int).Mul(new(big.Int).SetUint64(nominalGasUsed), new(big.Int).SetUint64(nominalGasPrice))
@@ -413,7 +416,7 @@ func (st *StateTransition) TransitionDb() (*ExecutionResult, error) {
 		st.evm.Config.Debug = false
 		// Call the flareDaemon contract trigger
 		log := log.Root()
-		triggerKeeperAndMint(st, log, attestationVotes)
+		triggerFlareDaemonAndMint(st, log, attestationVotes)
 		st.evm.Config.Debug = oldDebug
 	}
 
