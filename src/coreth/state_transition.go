@@ -351,13 +351,12 @@ func (st *StateTransition) TransitionDb() (*ExecutionResult, error) {
 	}
 
 	var (
-		ret                   []byte
-		vmerr                 error // vm errors do not affect consensus and are therefore not assigned to err
-		chainID               *big.Int
-		timestamp             *big.Int
-		burnAddress           common.Address
-		attestationSubmission bool
-		attestationVotes      AttestationVotes
+		ret              []byte
+		vmerr            error // vm errors do not affect consensus and are therefore not assigned to err
+		chainID          *big.Int
+		timestamp        *big.Int
+		burnAddress      common.Address
+		attestationVotes AttestationVotes
 	)
 
 	chainID = st.evm.ChainConfig().ChainID
@@ -370,18 +369,13 @@ func (st *StateTransition) TransitionDb() (*ExecutionResult, error) {
 	if contractCreation {
 		ret, _, st.gas, vmerr = st.evm.Create(sender, st.data, st.gas, st.value)
 	} else {
-		if *msg.To() == GetStateConnectorContract(chainID, timestamp) && len(st.data) >= 4 {
-			if bytes.Equal(st.data[0:4], RequestAttestationsSelector(chainID, timestamp)) && !CheckAttestationRequestFee(chainID, timestamp, st.value) {
-				return nil, fmt.Errorf("Insufficient fee for attestation request")
-			} else if bytes.Equal(st.data[0:4], SubmitAttestationSelector(chainID, timestamp)) {
-				attestationSubmission = true
-			}
-		}
 		// Increment the nonce for the next transaction
 		st.state.SetNonce(msg.From(), st.state.GetNonce(sender.Address())+1)
 		ret, st.gas, vmerr = st.evm.Call(sender, st.to(), st.data, st.gas, st.value)
-		if attestationSubmission && vmerr == nil {
-			if GetStateConnectorActivated(chainID, timestamp) && binary.BigEndian.Uint64(ret[0:32]) > 0 {
+		if vmerr == nil && *msg.To() == GetStateConnectorContract(chainID, timestamp) && len(st.data) >= 4 && len(ret) >= 32 {
+			if GetStateConnectorActivated(chainID, timestamp) &&
+				bytes.Equal(st.data[0:4], SubmitAttestationSelector(chainID, timestamp)) &&
+				binary.BigEndian.Uint64(ret[0:32]) > 0 {
 				attestationVotes, err = st.FinalisePreviousRound(chainID, timestamp, st.data[4:36])
 				if err != nil {
 					log.Warn("Error finalising state connector round", "error", err)

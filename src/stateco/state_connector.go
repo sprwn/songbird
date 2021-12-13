@@ -54,20 +54,6 @@ func GetStateConnectorCoinbaseSignalAddr(chainID *big.Int, blockTime *big.Int) c
 	}
 }
 
-func CheckAttestationRequestFee(chainID *big.Int, blockTime *big.Int, fee *big.Int) bool {
-	switch {
-	default:
-		return fee.Cmp(big.NewInt(1*10^18)) >= 0
-	}
-}
-
-func RequestAttestationsSelector(chainID *big.Int, blockTime *big.Int) []byte {
-	switch {
-	default:
-		return []byte{0x7c, 0x39, 0x31, 0xc6}
-	}
-}
-
 func SubmitAttestationSelector(chainID *big.Int, blockTime *big.Int) []byte {
 	switch {
 	default:

@@ -67,9 +67,7 @@ contract StateConnector {
     function requestAttestations(
         uint256 instructions,
         bytes32 id
-    ) external payable {
-        // Check for a fee burn, the exact fee over time is determined in the golang layer
-        require(msg.value > 0);
+    ) external {
         // Check for empty inputs
         require(instructions > 0);
         require(id > 0x0);
