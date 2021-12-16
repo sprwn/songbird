@@ -29,8 +29,12 @@ type AttestationVotes struct {
 	abstainedAttestors []common.Address
 }
 
+func GetTestingChain(chainID *big.Int) bool {
+	return chainID.Cmp(flareChainID) != 0 && chainID.Cmp(songbirdChainID) != 0
+}
+
 func GetStateConnectorActivated(chainID *big.Int, blockTime *big.Int) bool {
-	if chainID.Cmp(flareChainID) != 0 && chainID.Cmp(songbirdChainID) != 0 {
+	if GetTestingChain(chainID) {
 		return true
 	} else if chainID.Cmp(flareChainID) == 0 {
 		return blockTime.Cmp(flareStateConnectorActivationTime) >= 0
@@ -91,45 +95,49 @@ func GetFtsoWhitelistedPriceProvidersSelector(chainID *big.Int, blockTime *big.I
 
 // The default attestors are the FTSO price providers
 func (st *StateTransition) GetDefaultAttestors(chainID *big.Int, timestamp *big.Int) ([]common.Address, error) {
-	// Get VoterWhitelister contract
-	voterWhitelisterContractBytes, _, err := st.evm.Call(
-		vm.AccountRef(st.msg.From()),
-		GetPrioritisedFTSOContract(timestamp),
-		GetVoterWhitelisterSelector(chainID, timestamp),
-		GetFlareDaemonGasMultiplier(st.evm.Context.BlockNumber)*st.evm.Context.GasLimit,
-		big.NewInt(0))
-	if err != nil {
-		return []common.Address{}, err
+	if os.Getenv("TESTING_ATTESTATION_PROVIDERS") != "" && GetTestingChain(chainID) {
+		return GetEnvAttestors("TESTING"), nil
+	} else {
+		// Get VoterWhitelister contract
+		voterWhitelisterContractBytes, _, err := st.evm.Call(
+			vm.AccountRef(st.msg.From()),
+			GetPrioritisedFTSOContract(timestamp),
+			GetVoterWhitelisterSelector(chainID, timestamp),
+			GetFlareDaemonGasMultiplier(st.evm.Context.BlockNumber)*st.evm.Context.GasLimit,
+			big.NewInt(0))
+		if err != nil {
+			return []common.Address{}, err
+		}
+		// Get FTSO prive providers
+		voterWhitelisterContract := common.BytesToAddress(voterWhitelisterContractBytes)
+		priceProvidersBytes, _, err := st.evm.Call(
+			vm.AccountRef(st.msg.From()),
+			voterWhitelisterContract,
+			GetFtsoWhitelistedPriceProvidersSelector(chainID, timestamp),
+			GetFlareDaemonGasMultiplier(st.evm.Context.BlockNumber)*st.evm.Context.GasLimit,
+			big.NewInt(0))
+		if err != nil {
+			return []common.Address{}, err
+		}
+		NUM_ATTESTORS := len(priceProvidersBytes) / 32
+		var attestors []common.Address
+		for i := 0; i < NUM_ATTESTORS; i++ {
+			attestors = append(attestors, common.BytesToAddress(priceProvidersBytes[i*32:(i+1)*32]))
+		}
+		return attestors, nil
 	}
-	// Get FTSO prive providers
-	voterWhitelisterContract := common.BytesToAddress(voterWhitelisterContractBytes)
-	priceProvidersBytes, _, err := st.evm.Call(
-		vm.AccountRef(st.msg.From()),
-		voterWhitelisterContract,
-		GetFtsoWhitelistedPriceProvidersSelector(chainID, timestamp),
-		GetFlareDaemonGasMultiplier(st.evm.Context.BlockNumber)*st.evm.Context.GasLimit,
-		big.NewInt(0))
-	if err != nil {
-		return []common.Address{}, err
-	}
-	NUM_ATTESTORS := len(priceProvidersBytes) / 32
-	var attestors []common.Address
-	for i := 0; i < NUM_ATTESTORS; i++ {
-		attestors = append(attestors, common.BytesToAddress(priceProvidersBytes[i*32:(i+1)*32]))
-	}
-	return attestors, nil
 }
 
-func GetLocalAttestors() []common.Address {
-	localAttestationAttestorsString := os.Getenv("LOCAL_ATTESTATION_PROVIDERS")
-	if localAttestationAttestorsString == "" {
+func GetEnvAttestors(attestorType string) []common.Address {
+	envAttestationAttestorsString := os.Getenv(attestorType + "_ATTESTATION_PROVIDERS")
+	if envAttestationAttestorsString == "" {
 		return []common.Address{}
 	}
-	localAttestationProviders := strings.Split(localAttestationAttestorsString, ",")
-	NUM_ATTESTORS := len(localAttestationProviders)
+	envAttestationProviders := strings.Split(envAttestationAttestorsString, ",")
+	NUM_ATTESTORS := len(envAttestationProviders)
 	var attestors []common.Address
 	for i := 0; i < NUM_ATTESTORS; i++ {
-		attestors = append(attestors, common.HexToAddress(localAttestationProviders[i]))
+		attestors = append(attestors, common.HexToAddress(envAttestationProviders[i]))
 	}
 	return attestors
 }
@@ -181,7 +189,7 @@ func (st *StateTransition) FinalisePreviousRound(chainID *big.Int, timestamp *bi
 	if err != nil {
 		return AttestationVotes{}, err
 	}
-	localAttestors := GetLocalAttestors()
+	localAttestors := GetEnvAttestors("LOCAL")
 	var finalityReached bool
 	if len(localAttestors) > 0 {
 		localAttestationVotes, err := st.CountAttestations(localAttestors, instructions)

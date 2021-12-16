@@ -33,6 +33,8 @@ then
 	mkdir -p $LAUNCH_DIR/db/local/node5
 fi
 
+export TESTING_ATTESTATION_PROVIDERS="0xff50eF6F4b0568493175defa3655b10d68Bf41FB"
+
 # NODE 1
 printf "Launching Node 1 at 127.0.0.1:9650\n"
 export WEB3_API=debug
