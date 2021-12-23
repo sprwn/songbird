@@ -179,15 +179,15 @@ func (st *StateTransition) CountAttestations(attestors []common.Address, instruc
 	return attestationVotes, nil
 }
 
-func (st *StateTransition) FinalisePreviousRound(chainID *big.Int, timestamp *big.Int, currentRoundNumber []byte) (AttestationVotes, error) {
+func (st *StateTransition) FinalisePreviousRound(chainID *big.Int, timestamp *big.Int, currentRoundNumber []byte) error {
 	instructions := append(GetAttestationSelector(chainID, timestamp), currentRoundNumber...)
 	defaultAttestors, err := st.GetDefaultAttestors(chainID, timestamp)
 	if err != nil {
-		return AttestationVotes{}, err
+		return err
 	}
 	defaultAttestationVotes, err := st.CountAttestations(defaultAttestors, instructions)
 	if err != nil {
-		return AttestationVotes{}, err
+		return err
 	}
 	localAttestors := GetEnvAttestors("LOCAL")
 	var finalityReached bool
@@ -205,7 +205,7 @@ func (st *StateTransition) FinalisePreviousRound(chainID *big.Int, timestamp *bi
 		// Finalise defaultAttestationVotes.majorityDecision
 		merkleRootHashBytes, err := hex.DecodeString(defaultAttestationVotes.majorityDecision)
 		if err != nil {
-			return AttestationVotes{}, err
+			return err
 		}
 		finalisedData := append(append(FinaliseRoundSelector(chainID, timestamp), currentRoundNumber...), merkleRootHashBytes...)
 		coinbaseSignal := GetStateConnectorCoinbaseSignalAddr(chainID, timestamp)
@@ -215,7 +215,10 @@ func (st *StateTransition) FinalisePreviousRound(chainID *big.Int, timestamp *bi
 		}()
 		st.evm.Context.Coinbase = coinbaseSignal
 		_, _, err = st.evm.Call(vm.AccountRef(coinbaseSignal), st.to(), finalisedData, st.gas, st.value)
-		return defaultAttestationVotes, err
+		if err != nil {
+			return err
+		}
+		// Issue rewards to defaultAttestationRewards majority set here:
 	}
-	return AttestationVotes{}, nil
+	return nil
 }

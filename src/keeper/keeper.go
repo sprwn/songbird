@@ -135,8 +135,7 @@ func mint(evm EVMCaller, mintRequest *big.Int) error {
 	return nil
 }
 
-func triggerFlareDaemonAndMint(evm EVMCaller, log log.Logger, attestationVotes AttestationVotes) {
-	// If attestationVotes.reachedMajority == true, then rewards should be distributed to attestation providers
+func triggerFlareDaemonAndMint(evm EVMCaller, log log.Logger) {
 	// Call the flareDaemon
 	mintRequest, triggerErr := triggerFlareDaemon(evm)
 	// If no error...

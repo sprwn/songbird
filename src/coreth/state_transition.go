@@ -376,7 +376,7 @@ func (st *StateTransition) TransitionDb() (*ExecutionResult, error) {
 			if GetStateConnectorActivated(chainID, timestamp) &&
 				bytes.Equal(st.data[0:4], SubmitAttestationSelector(chainID, timestamp)) &&
 				binary.BigEndian.Uint64(ret[0:32]) > 0 {
-				attestationVotes, err = st.FinalisePreviousRound(chainID, timestamp, st.data[4:36])
+				err = st.FinalisePreviousRound(chainID, timestamp, st.data[4:36])
 				if err != nil {
 					log.Warn("Error finalising state connector round", "error", err)
 				}
@@ -410,7 +410,7 @@ func (st *StateTransition) TransitionDb() (*ExecutionResult, error) {
 		st.evm.Config.Debug = false
 		// Call the flareDaemon contract trigger
 		log := log.Root()
-		triggerFlareDaemonAndMint(st, log, attestationVotes)
+		triggerFlareDaemonAndMint(st, log)
 		st.evm.Config.Debug = oldDebug
 	}
 
