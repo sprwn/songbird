@@ -9,12 +9,13 @@
       "privateKey": "d77b743a0b9170c230e4a4be446b8605aa45f1d00da3d8cd5e5f778c287e1f22"
     }
   ],
-  "gas": "100000",
-  "gasPrice": "250",
+  "gas": "1000000",
+  "gasPrice": "1000",
   "chainId": 16,
   "url": "http://127.0.0.1:9650/ext/bc/C/rpc",
   "stateConnectorContract": "0x1000000000000000000000000000000000000001",
   "stateConnectorABI": "/home/my-usern/songbird/bin/src/stateco/StateConnector.json",
+  "mockRandomValue": "0x219458272a869b877db9fa6dd9522ed858e21fd23cce7089322e8af1d9f1c9ad",
   "bufferTimestampOffset": 1636070400,
   "bufferWindow": 90,
   "numBuffers": 3

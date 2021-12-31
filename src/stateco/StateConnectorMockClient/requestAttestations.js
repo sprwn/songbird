@@ -27,9 +27,9 @@ let instructions = process.argv[2];
 let id = process.argv[3];
 let dataAvailabilityProof = process.argv[4];
 
-return requestAttestations(instructions, id);
+return requestAttestations(instructions, id, dataAvailabilityProof);
 
-async function requestAttestations(instructions, id) {
+async function requestAttestations(instructions, id, dataAvailabilityProof) {
 	web3.eth.getTransactionCount(stateConnector.options.from)
     .then(nonce => {
         return [nonce, 
@@ -50,7 +50,11 @@ async function requestAttestations(instructions, id) {
         };
         web3.eth.accounts.signTransaction(rawTx, config.accounts[1].privateKey)
         .then(signedTx => {
-            web3.eth.sendSignedTransaction(signedTx.rawTransaction).then(console.log);
+            web3.eth.sendSignedTransaction(signedTx.rawTransaction)
+            .then(result => {
+                console.log(result);
+                setTimeout(() => {requestAttestations(instructions, id, dataAvailabilityProof)}, 5000);
+            });
         })
     })
 }

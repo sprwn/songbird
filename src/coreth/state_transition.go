@@ -42,12 +42,12 @@ import (
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/log"
 
 	"github.com/ava-labs/coreth/core/types"
 	"github.com/ava-labs/coreth/core/vm"
 	"github.com/ava-labs/coreth/params"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/log"
 )
 
 var emptyCodeHash = crypto.Keccak256Hash(nil)
@@ -351,12 +351,11 @@ func (st *StateTransition) TransitionDb() (*ExecutionResult, error) {
 	}
 
 	var (
-		ret              []byte
-		vmerr            error // vm errors do not affect consensus and are therefore not assigned to err
-		chainID          *big.Int
-		timestamp        *big.Int
-		burnAddress      common.Address
-		attestationVotes AttestationVotes
+		ret         []byte
+		vmerr       error // vm errors do not affect consensus and are therefore not assigned to err
+		chainID     *big.Int
+		timestamp   *big.Int
+		burnAddress common.Address
 	)
 
 	chainID = st.evm.ChainConfig().ChainID
@@ -372,10 +371,10 @@ func (st *StateTransition) TransitionDb() (*ExecutionResult, error) {
 		// Increment the nonce for the next transaction
 		st.state.SetNonce(msg.From(), st.state.GetNonce(sender.Address())+1)
 		ret, st.gas, vmerr = st.evm.Call(sender, st.to(), st.data, st.gas, st.value)
-		if vmerr == nil && *msg.To() == GetStateConnectorContract(chainID, timestamp) && len(st.data) >= 4 && len(ret) >= 32 {
+		if vmerr == nil && *msg.To() == GetStateConnectorContract(chainID, timestamp) && len(st.data) >= 36 && len(ret) == 32 {
 			if GetStateConnectorActivated(chainID, timestamp) &&
 				bytes.Equal(st.data[0:4], SubmitAttestationSelector(chainID, timestamp)) &&
-				binary.BigEndian.Uint64(ret[0:32]) > 0 {
+				binary.BigEndian.Uint64(ret[24:32]) > 0 {
 				err = st.FinalisePreviousRound(chainID, timestamp, st.data[4:36])
 				if err != nil {
 					log.Warn("Error finalising state connector round", "error", err)

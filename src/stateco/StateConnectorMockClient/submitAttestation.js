@@ -23,79 +23,49 @@ stateConnector.options.data = '0x' + contract.deployedBytecode;
 stateConnector.options.from = config.accounts[0].address;
 stateConnector.options.address = config.stateConnectorContract;
 
-web3.eth.getBlockNumber()
-.then(fromBlockNumber => {
-    collectEvents(fromBlockNumber, -1, {bufferNumber:[], attestationLeaf:[]});
-})
+var wallTimestamp = Math.round(+new Date()/1000);
+var bufferNumber = Math.floor((wallTimestamp-config.bufferTimestampOffset)/config.bufferWindow);
+submitMockAttestation(bufferNumber);
 
-async function collectEvents(fromBlockNumber, openBufferNumber, openAttestationLeaves) {
-    web3.eth.getBlock("latest")
-    .then(block => {
-        var bufferNumber = Math.floor((block.timestamp-config.bufferTimestampOffset)/config.bufferWindow);
-        var wallTimestamp = Math.round(+new Date()/1000);
-        if ((bufferNumber > openBufferNumber || wallTimestamp - block.timestamp > config.bufferWindow) && openBufferNumber > -1) {
-            // Time to finalise the previous buffer
-        } else if (fromBlockNumber >= block.number) {
-            console.log("Awaiting the creation of new blocks...");
-            setTimeout(() => {collectEvents(block.number, openBufferNumber, openAttestationLeaves)}, 10000);
-        } else {
-            console.log("Collecting attestation requests from block ", fromBlockNumber, "to ", block.number);
-            web3.eth.getPastLogs({
-                fromBlock: fromBlockNumber,
-                toBlock: block.number,
-                address: stateConnector.options.address
-            })
-            .then(events => {
-                if (events.length == 0) {
-                    setTimeout(() => {collectEvents(block.number+1, openBufferNumber, openAttestationLeaves)}, 10000);
-                } else {
-                    events.forEach((event, i) => {
-                        return parseEventData(event.data, event.blockNumber)
-                        .then(parsedEvent => {
-                            if (openBufferNumber == -1) {
-                                return collectEvents(event.blockNumber, parsedEvent[0]+1, openAttestationLeaves);
-                            } else if (parsedEvent[0] == openBufferNumber) {
-                                openAttestationLeaves.bufferNumber.concat(parsedEvent[0]);
-                                openAttestationLeaves.attestationLeaf.concat(parsedEvent[1]);
-                                if (i+1 == events.length) {
-                                    setTimeout(() => {collectEvents(block.number+1, openBufferNumber, openAttestationLeaves)}, 10000);
-                                }
-                            } else if (parsedEvent[0] > openBufferNumber) {
-                                // attestationLeaves is now a complete merkle tree
-                                // send attestation using openAttestationLeaves
-                                // begin operating on next buffer number
-                                setTimeout(() => {collectEvents(fromBlockNumber, parsedEvent[0], {bufferNumber:[], attestationLeaf:[]})}, 10000);
-                            }
-                        })
-                    })
-                }
-            })
-        }
+async function submitMockAttestation(bufferNumber) {
+	web3.eth.getTransactionCount(stateConnector.options.from)
+    .then(nonce => {
+        var vote = web3.utils.toBN(web3.utils.soliditySha3(bufferNumber));
+        var mask = web3.utils.toBN(config.mockRandomValue);
+        var maskedVote = '0x' + vote.xor(mask).toString(16);
+        console.log(bufferNumber, maskedVote, web3.utils.soliditySha3(config.mockRandomValue), config.mockRandomValue);
+        return [nonce, 
+            stateConnector.methods.submitAttestation(
+            bufferNumber,
+            maskedVote,
+            web3.utils.soliditySha3(config.mockRandomValue),
+            config.mockRandomValue).encodeABI()];
+    })
+    .then(txData => {
+        var rawTx = {
+            chainId: config.chainId,
+            nonce: txData[0],
+            gasPrice: web3.utils.toHex(web3.utils.toWei(config.gasPrice, 'gwei')),
+            gas: web3.utils.toHex(config.gas),
+            to: stateConnector.options.address,
+            from: stateConnector.options.from,
+            data: txData[1]
+        };
+        web3.eth.accounts.signTransaction(rawTx, config.accounts[0].privateKey)
+        .then(signedTx => {
+            web3.eth.sendSignedTransaction(signedTx.rawTransaction)
+            .then(result => {
+                console.log(result);
+                setTimeout(() => {
+                    stateConnector.methods.totalBuffers().call()
+                    .then(totalBuffers => {
+                        console.log(totalBuffers);
+                        var wallTimestamp = Math.round(+new Date()/1000);
+                        var bufferNumber = Math.floor((wallTimestamp-config.bufferTimestampOffset)/config.bufferWindow);
+                        submitMockAttestation(bufferNumber);
+                    });
+                }, config.bufferWindow*1000);
+            });
+        })
     })
 }
-
-async function parseEventData(eventData, eventBlockNumber) {
-    var bufferNumber = Math.floor((web3.utils.hexToNumber(eventData.slice(0,66))-config.bufferTimestampOffset)/config.bufferWindow);
-    var instructions = "0x" + eventData.slice(66,130);
-    var id = "0x" + eventData.slice(130,194);
-    var dataAvailabilityProof = "0x" + eventData.slice(194,258);
-    console.log("Buffer Round:\t", bufferNumber, '\nInstructions:\t', instructions, '\nID:\t\t', id, '\nData Availability Proof:\t', dataAvailabilityProof, '\n');
-    if (instructions == "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff") {
-        // Mock event interface
-        return [bufferNumber, web3.utils.soliditySha3(eventBlockNumber, bufferNumber, instructions, id, dataAvailabilityProof)];
-    } else {
-        // Include custom event types as unique function calls here:
-        return [bufferNumber, "0x0000000000000000000000000000000000000000000000000000000000000000"];
-    }
-}
-
-async function submitAttestation(attestationLeaves) {
-
-}
-
-async function prepareMerkleTree(attestationLeaves) {
-
-}
-
-// stateConnector.methods.buffers(stateConnector.options.from).call()
-// .then(console.log);

@@ -96,7 +96,7 @@ func GetFtsoWhitelistedPriceProvidersSelector(chainID *big.Int, blockTime *big.I
 // The default attestors are the FTSO price providers
 func (st *StateTransition) GetDefaultAttestors(chainID *big.Int, timestamp *big.Int) ([]common.Address, error) {
 	if os.Getenv("TESTING_ATTESTATION_PROVIDERS") != "" && GetTestingChain(chainID) {
-		return GetEnvAttestors("TESTING"), nil
+		return GetEnvAttestationProviders("TESTING"), nil
 	} else {
 		// Get VoterWhitelister contract
 		voterWhitelisterContractBytes, _, err := st.evm.Call(
@@ -128,12 +128,12 @@ func (st *StateTransition) GetDefaultAttestors(chainID *big.Int, timestamp *big.
 	}
 }
 
-func GetEnvAttestors(attestorType string) []common.Address {
-	envAttestationAttestorsString := os.Getenv(attestorType + "_ATTESTATION_PROVIDERS")
-	if envAttestationAttestorsString == "" {
+func GetEnvAttestationProviders(attestorType string) []common.Address {
+	envAttestationProvidersString := os.Getenv(attestorType + "_ATTESTATION_PROVIDERS")
+	if envAttestationProvidersString == "" {
 		return []common.Address{}
 	}
-	envAttestationProviders := strings.Split(envAttestationAttestorsString, ",")
+	envAttestationProviders := strings.Split(envAttestationProvidersString, ",")
 	NUM_ATTESTORS := len(envAttestationProviders)
 	var attestors []common.Address
 	for i := 0; i < NUM_ATTESTORS; i++ {
@@ -180,7 +180,8 @@ func (st *StateTransition) CountAttestations(attestors []common.Address, instruc
 }
 
 func (st *StateTransition) FinalisePreviousRound(chainID *big.Int, timestamp *big.Int, currentRoundNumber []byte) error {
-	instructions := append(GetAttestationSelector(chainID, timestamp), currentRoundNumber...)
+	getAttestationSelector := GetAttestationSelector(chainID, timestamp)
+	instructions := append(getAttestationSelector[:], currentRoundNumber[:]...)
 	defaultAttestors, err := st.GetDefaultAttestors(chainID, timestamp)
 	if err != nil {
 		return err
@@ -189,7 +190,7 @@ func (st *StateTransition) FinalisePreviousRound(chainID *big.Int, timestamp *bi
 	if err != nil {
 		return err
 	}
-	localAttestors := GetEnvAttestors("LOCAL")
+	localAttestors := GetEnvAttestationProviders("LOCAL")
 	var finalityReached bool
 	if len(localAttestors) > 0 {
 		localAttestationVotes, err := st.CountAttestations(localAttestors, instructions)
@@ -203,22 +204,26 @@ func (st *StateTransition) FinalisePreviousRound(chainID *big.Int, timestamp *bi
 	}
 	if finalityReached {
 		// Finalise defaultAttestationVotes.majorityDecision
+		finaliseRoundSelector := FinaliseRoundSelector(chainID, timestamp)
+		finalisedData := append(finaliseRoundSelector[:], currentRoundNumber[:]...)
 		merkleRootHashBytes, err := hex.DecodeString(defaultAttestationVotes.majorityDecision)
 		if err != nil {
 			return err
 		}
-		finalisedData := append(append(FinaliseRoundSelector(chainID, timestamp), currentRoundNumber...), merkleRootHashBytes...)
+		finalisedData = append(finalisedData[:], merkleRootHashBytes[:]...)
 		coinbaseSignal := GetStateConnectorCoinbaseSignalAddr(chainID, timestamp)
 		originalCoinbase := st.evm.Context.Coinbase
 		defer func() {
 			st.evm.Context.Coinbase = originalCoinbase
 		}()
 		st.evm.Context.Coinbase = coinbaseSignal
-		_, _, err = st.evm.Call(vm.AccountRef(coinbaseSignal), st.to(), finalisedData, st.gas, st.value)
+
+		_, _, err = st.evm.Call(vm.AccountRef(coinbaseSignal), st.to(), finalisedData, st.evm.Context.GasLimit, new(big.Int).SetUint64(0))
 		if err != nil {
 			return err
 		}
-		// Issue rewards to defaultAttestationRewards majority set here:
+
+		// Issue rewards to defaultAttestationVotes.majorityAttestors here:
 	}
 	return nil
 }
